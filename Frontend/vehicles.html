@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    ...
+</head>
+
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>TransitOps | Vehicle Registry</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div id="container">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+    <div class="logo">
+        <h2>🚚 TransitOps</h2>
+    </div>
+
+    <nav>
+
+        <ul>
+
+            <li>
+                <a href="dashboard.html">Dashboard</a>
+            </li>
+
+            <li class="active">
+                <a href="vehicles.html">Vehicle Registry</a>
+            </li>
+
+            <li>
+                <a href="drivers.html">Driver Management</a>
+            </li>
+
+            <li>
+                <a href="trips.html">Trip Management</a>
+            </li>
+
+            <li>
+                <a href="maintenance.html">Maintenance</a>
+            </li>
+
+            <li>
+                <a href="fuel-expenses.html">Fuel & Expenses</a>
+            </li>
+
+            <li>
+                <a href="reports.html">Reports</a>
+            </li>
+
+            <li>
+                <a href="settings.html">Settings</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+</aside>
+
+    <!-- Main -->
+
+    <main id="main">
+
+        <!-- Top Navbar -->
+
+        <header id="topbar">
+
+            <div>
+
+                <h1>Vehicle Registry</h1>
+
+                <p>Manage all fleet vehicles.</p>
+
+            </div>
+
+            <div id="profile">
+
+                <i class="fa-solid fa-bell"></i>
+
+                <img src="assets/avatars/admin.png">
+
+            </div>
+
+        </header>
+        <!-- Statistics -->
+
+<section id="stats">
+
+<div class="card">
+
+<h3>Total Vehicles</h3>
+
+<h2>125</h2>
+
+</div>
+
+<div class="card">
+
+<h3>Available</h3>
+
+<h2>87</h2>
+
+</div>
+
+<div class="card">
+
+<h3>On Trip</h3>
+
+<h2>24</h2>
+
+</div>
+
+<div class="card">
+
+<h3>Maintenance</h3>
+
+<h2>14</h2>
+
+</div>
+
+</section>
+
+<!-- Toolbar -->
+
+<section id="toolbar">
+
+<input
+type="text"
+placeholder="Search Vehicle...">
+
+<select>
+
+<option>All Types</option>
+
+<option>Truck</option>
+
+<option>Van</option>
+
+<option>Mini Truck</option>
+
+</select>
+
+<select>
+
+<option>All Status</option>
+
+<option>Available</option>
+
+<option>On Trip</option>
+
+<option>In Shop</option>
+
+<option>Retired</option>
+
+</select>
+
+<button>
+
+<i class="fa-solid fa-plus"></i>
+
+Add Vehicle
+
+</button>
+
+</section>
+<section id="table-section">
+<table class="vehicle-table">
+
+    <thead>
+
+        <tr>
+
+            <th>Registration No.</th>
+            <th>Vehicle</th>
+            <th>Type</th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th>Health</th>
+            <th>Documents</th>
+            <th>Actions</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr>
+
+            <td>WB20AB1234</td>
+            <td>Tata Ace</td>
+            <td>Mini Truck</td>
+            <td>750 Kg</td>
+            <td>Available</td>
+            <td>Excellent</td>
+            <td>
+                <button>View</button>
+            </td>
+            <td>
+                <button>Edit</button>
+                <button>Delete</button>
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>WB10XY5678</td>
+            <td>Ashok Leyland</td>
+            <td>Truck</td>
+            <td>5000 Kg</td>
+            <td>On Trip</td>
+            <td>Good</td>
+            <td>
+                <button>View</button>
+            </td>
+            <td>
+                <button>Edit</button>
+                <button>Delete</button>
+            </td>
+
+        </tr>
+
+    </tbody>
+
+</table>
+</section>
+<div id="vehicle-modal">
+
+<h2>Add Vehicle</h2>
+
+<form>
+
+<input
+type="text"
+placeholder="Registration Number">
+
+<input
+type="text"
+placeholder="Vehicle Model">
+
+<select>
+
+<option>Truck</option>
+
+<option>Van</option>
+
+<option>Mini Truck</option>
+
+</select>
+
+<input
+type="number"
+placeholder="Maximum Capacity">
+
+<input
+type="number"
+placeholder="Odometer">
+
+<input
+type="number"
+placeholder="Acquisition Cost">
+
+<select>
+
+<option>Available</option>
+
+<option>Retired</option>
+
+</select>
+
+<input
+type="file">
+
+<button>
+
+Save Vehicle
+
+</button>
+
+</form>
+
+</div>
+</main>
+
+</div>
+
+</body>
+
+</html>
