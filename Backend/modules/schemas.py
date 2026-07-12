@@ -23,6 +23,21 @@ class Register(BaseModel):
     role: str
 
 
+class ForgotPassword(BaseModel):
+    email: EmailStr
+
+
+class VerifyPasswordOtp(BaseModel):
+    email: EmailStr
+    otp: str
+
+
+class ResetPassword(BaseModel):
+    reset_token: str
+    password: str
+    confirm_password: str
+
+
 # =====================================================
 # ROLE
 # =====================================================

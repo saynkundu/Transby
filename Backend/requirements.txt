@@ -4,7 +4,7 @@ pyjwt
 pydantic
 python-multipart
 bcrypt
-dotenv
+python-dotenv
 pydantic[email]
 jinja2
 sqlalchemy
