@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
 from modules.db import Base, engine, get_db
-from modules.database import PasswordResetRequest, Role, User, Vehicle
+from modules.database import PasswordResetRequest, Role, User, Vehicle,Driver,Trip
 from modules.hashed_password import check_password, hashed_password
 from modules.schemas import (
     ForgotPassword,
@@ -314,7 +314,7 @@ def add_vehicle(
         }
     }
 
-from modules.database import Vehicle
+
 
 @app.get("/api/vehicles")
 def get_all_vehicles(db: Session = Depends(get_db)):
@@ -348,7 +348,7 @@ def vehicles_page(
         "vehicles.html",
         {
             "vehicles": vehicles
-        }
+        },"vehicles.html"
     )
 
 @app.delete("/api/vehicle/{vehicle_id}")
@@ -373,5 +373,69 @@ def delete_vehicle(
     return {
         "message": "Vehicle deleted successfully."
     }
+
+
+
+
+@app.get("/drivers", response_class=HTMLResponse)
+def drivers_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    drivers = db.query(Driver).all()
+
+    return templates.TemplateResponse(
+        "drivers.html",
+        {
+            "request": request,
+            "drivers": drivers
+        }
+    )
+
+from sqlalchemy import func
+
+@app.get("/drivers", response_class=HTMLResponse)
+def drivers_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    drivers = db.query(Driver).all()
+
+    performance = []
+
+    for driver in drivers:
+
+        total_trips = db.query(Trip).filter(
+            Trip.driver_id == driver.driver_id
+        ).count()
+
+        completed = db.query(Trip).filter(
+            Trip.driver_id == driver.driver_id,
+            Trip.status == "Completed"
+        ).count()
+
+        cancelled = db.query(Trip).filter(
+            Trip.driver_id == driver.driver_id,
+            Trip.status == "Cancelled"
+        ).count()
+
+        performance.append({
+            "name": driver.full_name,
+            "total": total_trips,
+            "completed": completed,
+            "cancelled": cancelled,
+            "rating": driver.safety_score
+        })
+
+    return templates.TemplateResponse(
+        "drivers.html",
+        {
+            "request": request,
+            "drivers": drivers,
+            "performance": performance
+        }
+    )
 # Makes the remaining frontend pages, such as dashboard.html, available after login.
 app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
