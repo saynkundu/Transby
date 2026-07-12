@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TransitOps | Dashboard</title>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- ================= Sidebar ================= -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                <h2>🚚 TransitOps</h2>
+            </div>
+
+            <nav>
+
+                <ul>
+
+                    <li class="active">
+                        <a href="dashboard.html">Dashboard</a>
+                    </li>
+
+                    <li>
+                        <a href="vehicles.html">Vehicle Registry</a>
+                    </li>
+
+                    <li>
+                        <a href="drivers.html">Driver Management</a>
+                    </li>
+
+                    <li>
+                        <a href="trips.html">Trip Management</a>
+                    </li>
+
+                    <li>
+                        <a href="maintenance.html">Maintenance</a>
+                    </li>
+
+                    <li>
+                        <a href="fuel-expenses.html">Fuel & Expenses</a>
+                    </li>
+
+                    <li>
+                        <a href="reports.html">Reports</a>
+                    </li>
+
+                    <li>
+                        <a href="settings.html">Settings</a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </aside>
+
+        <!-- ================= Main ================= -->
+
+        <main class="main-content">
+
+            <!-- Header -->
+
+            <header>
+
+                <div>
+
+                    <h1>Dashboard</h1>
+
+                    <p>Welcome back, Fleet Manager 👋</p>
+
+                </div>
+
+                <div>
+
+                    <input
+                        type="text"
+                        placeholder="Search vehicles, drivers, trips...">
+
+                    <button>🔔</button>
+
+                    <button>👤 Admin</button>
+
+                </div>
+
+            </header>
+
+            <!-- Filters -->
+
+            <section>
+
+                <select>
+                    <option>Vehicle Type</option>
+                </select>
+
+                <select>
+                    <option>Status</option>
+                </select>
+
+                <select>
+                    <option>Region</option>
+                </select>
+
+                <button>Apply Filters</button>
+
+            </section>
+
+            <!-- KPI Cards -->
+
+            <section>
+
+                <article>
+
+                    <h4>Total Vehicles</h4>
+
+                    <h2>53</h2>
+
+                </article>
+
+                <article>
+
+                    <h4>Available</h4>
+
+                    <h2>42</h2>
+
+                </article>
+
+                <article>
+
+                    <h4>Maintenance</h4>
+
+                    <h2>05</h2>
+
+                </article>
+
+                <article>
+
+                    <h4>Active Trips</h4>
+
+                    <h2>18</h2>
+
+                </article>
+
+                <article>
+
+                    <h4>Pending Trips</h4>
+
+                    <h2>09</h2>
+
+                </article>
+
+                <article>
+
+                    <h4>Drivers On Duty</h4>
+
+                    <h2>26</h2>
+
+                </article>
+
+                <article>
+
+                    <h4>Fleet Utilization</h4>
+
+                    <h2>81%</h2>
+
+                </article>
+
+            </section>
+
+            <!-- Dashboard Content -->
+
+            <section>
+
+                <!-- Recent Trips -->
+
+                <div>
+
+                    <h2>Recent Trips</h2>
+
+                    <table border="1">
+
+                        <tr>
+
+                            <th>Trip ID</th>
+
+                            <th>Vehicle</th>
+
+                            <th>Driver</th>
+
+                            <th>Status</th>
+
+                            <th>ETA</th>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>TR001</td>
+
+                            <td>Truck-05</td>
+
+                            <td>Alex</td>
+
+                            <td>On Trip</td>
+
+                            <td>45 mins</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>TR002</td>
+
+                            <td>Truck-12</td>
+
+                            <td>John</td>
+
+                            <td>Completed</td>
+
+                            <td>-</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>TR003</td>
+
+                            <td>Mini-08</td>
+
+                            <td>Priya</td>
+
+                            <td>Dispatched</td>
+
+                            <td>1 hr</td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                <!-- Fleet Status -->
+
+                <div>
+
+                    <h2>Fleet Status</h2>
+
+                    <p>Available : 42</p>
+
+                    <progress value="42" max="53"></progress>
+
+                    <p>On Trip : 18</p>
+
+                    <progress value="18" max="53"></progress>
+
+                    <p>Maintenance : 05</p>
+
+                    <progress value="5" max="53"></progress>
+
+                </div>
+
+            </section>
+
+            <!-- Quick Actions -->
+
+            <section>
+
+                <h2>Quick Actions</h2>
+
+                <button>Add Vehicle</button>
+
+                <button>Add Driver</button>
+
+                <button>Create Trip</button>
+
+                <button>Schedule Maintenance</button>
+
+            </section>
+
+            <!-- Notifications -->
+
+            <section>
+
+                <h2>Latest Notifications</h2>
+
+                <ul>
+
+                    <li>Truck-08 requires maintenance.</li>
+
+                    <li>Driver Rahul completed Trip TR018.</li>
+
+                    <li>Fuel expense updated.</li>
+
+                </ul>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
