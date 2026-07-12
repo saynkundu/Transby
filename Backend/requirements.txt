@@ -4,3 +4,6 @@ pyjwt
 pydantic
 python-multipart
 bcrypt
+dotenv
+pydantic[email]
+jinja2
