@@ -60,6 +60,22 @@ class User(Base):
     role = relationship("Role", back_populates="users")
 
 
+class PasswordResetRequest(Base):
+
+    __tablename__ = "password_reset_requests"
+
+    reset_id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False, index=True)
+    otp_hash = Column(String(64), nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    attempts = Column(Integer, nullable=False, default=0)
+    verified_at = Column(DateTime, nullable=True)
+    reset_token_hash = Column(String(64), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    user = relationship("User")
+
+
 # =====================================================
 # VEHICLES
 # =====================================================
