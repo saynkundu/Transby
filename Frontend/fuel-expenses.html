@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel & Expense | TransitOps</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Sidebar -->
+
+        <aside>
+
+            <h2>🚚 TransitOps</h2>
+
+            <ul>
+
+                <li><a href="dashboard.html">Dashboard</a></li>
+
+                <li><a href="vehicles.html">Vehicle Registry</a></li>
+
+                <li><a href="drivers.html">Driver Management</a></li>
+
+                <li><a href="trips.html">Trip Management</a></li>
+
+                <li><a href="maintenance.html">Maintenance</a></li>
+
+                <li><a href="fuel-expenses.html">Fuel & Expenses</a></li>
+
+                <li><a href="reports.html">Reports</a></li>
+
+                <li><a href="settings.html">Settings</a></li>
+
+            </ul>
+
+        </aside>
+
+        <!-- Main Content -->
+
+        <main>
+
+            <!-- Header -->
+
+            <header>
+
+                <div>
+
+                    <h1>Fuel & Expense Management</h1>
+
+                    <p>Track fuel usage and operational expenses.</p>
+
+                </div>
+
+                <div>
+
+                    <button>+ Add Fuel Entry</button>
+
+                    <button>+ Add Expense</button>
+
+                    <button>Export PDF</button>
+
+                </div>
+
+            </header>
+
+            <!-- Search -->
+
+            <section>
+
+                <input type="text" placeholder="Search Vehicle / Driver">
+
+            </section>
+
+            <!-- Filters -->
+
+            <section>
+
+                <select>
+
+                    <option>Vehicle</option>
+
+                </select>
+
+                <select>
+
+                    <option>Expense Type</option>
+
+                </select>
+
+                <select>
+
+                    <option>Month</option>
+
+                </select>
+
+                <button>Apply</button>
+
+            </section>
+
+            <!-- KPI Cards -->
+
+            <section>
+
+                <article>
+
+                    <h4>Total Fuel Cost</h4>
+
+                    <h2>₹85,000</h2>
+
+                </article>
+
+                <article>
+
+                    <h4>Total Expenses</h4>
+
+                    <h2>₹1,32,000</h2>
+
+                </article>
+
+                <article>
+
+                    <h4>Fuel Entries</h4>
+
+                    <h2>215</h2>
+
+                </article>
+
+                <article>
+
+                    <h4>Average Mileage</h4>
+
+                    <h2>15.6 km/L</h2>
+
+                </article>
+
+            </section>
+
+            <!-- Fuel Records -->
+
+            <section>
+
+                <h2>Fuel Records</h2>
+
+                <table border="1">
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Vehicle</th>
+
+                        <th>Driver</th>
+
+                        <th>Fuel Type</th>
+
+                        <th>Quantity</th>
+
+                        <th>Cost</th>
+
+                        <th>Mileage</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>12-07-2026</td>
+
+                        <td>TRK-101</td>
+
+                        <td>Rahul</td>
+
+                        <td>Diesel</td>
+
+                        <td>80 L</td>
+
+                        <td>₹7,200</td>
+
+                        <td>16 km/L</td>
+
+                        <td>
+
+                            <button>View</button>
+
+                            <button>Edit</button>
+
+                            <button>Delete</button>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </section>
+
+            <!-- Expense Records -->
+
+            <section>
+
+                <h2>Expense Records</h2>
+
+                <table border="1">
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Vehicle</th>
+
+                        <th>Expense</th>
+
+                        <th>Amount</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>11-07-2026</td>
+
+                        <td>TRK-205</td>
+
+                        <td>Tyre Replacement</td>
+
+                        <td>₹18,500</td>
+
+                        <td>Approved</td>
+
+                        <td>
+
+                            <button>View</button>
+
+                            <button>Edit</button>
+
+                            <button>Delete</button>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </section>
+
+            <!-- Expense Categories -->
+
+            <section>
+
+                <h2>Expense Categories</h2>
+
+                <ul>
+
+                    <li>Fuel</li>
+
+                    <li>Repair</li>
+
+                    <li>Insurance</li>
+
+                    <li>Toll Tax</li>
+
+                    <li>Parking</li>
+
+                    <li>Cleaning</li>
+
+                </ul>
+
+            </section>
+
+            <!-- Fuel Analytics -->
+
+            <section>
+
+                <h2>Fuel Analytics</h2>
+
+                <div>
+
+                    <p>Monthly Fuel Consumption Chart</p>
+
+                </div>
+
+                <div>
+
+                    <p>Expense Distribution Chart</p>
+
+                </div>
+
+            </section>
+
+            <!-- Expense Alerts -->
+
+            <section>
+
+                <h2>Alerts</h2>
+
+                <ul>
+
+                    <li>⚠ Fuel cost increased by 12% this month.</li>
+
+                    <li>⚠ TRK-205 maintenance expense exceeded budget.</li>
+
+                    <li>⚠ Vehicle TRK-112 has no fuel entry for 7 days.</li>
+
+                </ul>
+
+            </section>
+
+            <!-- Quick Actions -->
+
+            <section>
+
+                <h2>Quick Actions</h2>
+
+                <button>Add Fuel Entry</button>
+
+                <button>Add Expense</button>
+
+                <button>Download Report</button>
+
+                <button>View Analytics</button>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
