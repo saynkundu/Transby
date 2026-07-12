@@ -5,6 +5,675 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TransitOps | Dashboard</title>
+<style>/* ======================================
+   TransitOps Dashboard
+   Light + Dark Mode Support
+====================================== */
+
+
+/* Theme */
+
+:root{
+
+    --background:#F8FAFC;
+    --card:#FFFFFF;
+    --sidebar:#0F172A;
+    --input:#F1F5F9;
+
+    --text:#0F172A;
+    --secondary:#64748B;
+
+    --primary:#06B6D4;
+    --hover:#0891B2;
+
+    --border:rgba(6,182,212,0.25);
+
+}
+
+
+
+
+.dark-mode{
+
+    --background:#0B1120;
+    --card:#111827;
+    --sidebar:#020617;
+    --input:#0F172A;
+
+    --text:#F8FAFC;
+    --secondary:#94A3B8;
+
+    --primary:#06B6D4;
+    --hover:#0891B2;
+
+    --border:rgba(6,182,212,0.25);
+
+}
+
+
+
+
+/* Reset */
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+    font-family:"Poppins",sans-serif;
+
+}
+
+
+
+body{
+
+    min-height:100vh;
+
+    background:var(--background);
+
+    color:var(--text);
+
+}
+
+
+
+
+
+/* Main Layout */
+
+
+.dashboard-container{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+
+
+
+
+/* ================= Sidebar ================= */
+
+
+.sidebar{
+
+    width:260px;
+
+    background:var(--sidebar);
+
+    padding:25px 20px;
+
+    position:fixed;
+
+    height:100vh;
+
+    left:0;
+
+    top:0;
+
+}
+
+
+
+
+.logo h2{
+
+    color:white;
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+    font-size:24px;
+
+}
+
+
+
+
+
+.sidebar ul{
+
+    list-style:none;
+
+}
+
+
+
+.sidebar li{
+
+    margin:12px 0;
+
+}
+
+
+
+.sidebar a{
+
+    display:block;
+
+    padding:12px 15px;
+
+    color:#CBD5E1;
+
+    text-decoration:none;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+}
+
+
+
+.sidebar a:hover,
+.sidebar .active a{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+
+
+
+
+/* ================= Main ================= */
+
+
+.main-content{
+
+    margin-left:260px;
+
+    padding:30px;
+
+    width:calc(100% - 260px);
+
+}
+
+
+
+
+
+/* Header */
+
+
+header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+
+
+header h1{
+
+    font-size:32px;
+
+    color:var(--text);
+
+}
+
+
+
+header p{
+
+    color:var(--secondary);
+
+}
+
+
+
+
+header input{
+
+    height:42px;
+
+    width:280px;
+
+    padding:0 15px;
+
+    border-radius:10px;
+
+    border:1px solid var(--border);
+
+    background:var(--input);
+
+    outline:none;
+
+    color:var(--text);
+
+}
+
+header button{
+
+    margin-left:10px;
+
+    padding:10px 15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:var(--primary);
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+
+/* Filters */
+
+
+section select{
+
+    padding:12px;
+
+    border-radius:10px;
+
+    border:1px solid var(--border);
+
+    background:var(--input);
+
+    color:var(--text);
+
+    margin-right:10px;
+
+}
+
+
+
+section button{
+
+    padding:12px 18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:var(--primary);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+
+section button:hover{
+
+    background:var(--hover);
+
+}
+
+
+
+
+
+
+
+/* KPI Cards */
+
+
+.main-content > section:nth-of-type(2){
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+
+    gap:20px;
+
+    margin:30px 0;
+
+}
+
+
+
+article{
+
+    background:var(--card);
+
+    padding:25px;
+
+    border-radius:15px;
+
+    border:1px solid var(--border);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+
+article h4{
+
+    color:var(--secondary);
+
+    font-size:14px;
+
+}
+
+
+
+article h2{
+
+    margin-top:10px;
+
+    color:var(--primary);
+
+    font-size:30px;
+
+}
+
+
+
+
+
+
+
+/* Dashboard Content */
+
+
+.main-content > section:nth-of-type(3){
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:25px;
+
+}
+
+
+
+
+
+.main-content section div{
+
+    background:var(--card);
+
+    padding:25px;
+
+    border-radius:15px;
+
+    border:1px solid var(--border);
+
+}
+
+
+
+
+
+h2{
+
+    margin-bottom:15px;
+
+}
+
+
+
+
+
+
+/* Table */
+
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+
+
+th{
+
+    background:var(--primary);
+
+    color:white;
+
+    padding:12px;
+
+}
+
+
+
+td{
+
+    padding:12px;
+
+    text-align:center;
+
+    color:var(--text);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+
+
+
+
+
+
+/* Progress */
+
+
+progress{
+
+    width:100%;
+
+    height:15px;
+
+    accent-color:var(--primary);
+
+}
+
+
+
+
+
+
+
+/* Quick Actions */
+
+
+.main-content > section:nth-of-type(4){
+
+    margin-top:25px;
+
+    background:var(--card);
+
+    padding:25px;
+
+    border-radius:15px;
+
+    border:1px solid var(--border);
+
+}
+
+
+
+
+
+/* Notifications */
+
+
+.main-content > section:last-child{
+
+    margin-top:25px;
+
+    background:var(--card);
+
+    padding:25px;
+
+    border-radius:15px;
+
+    border:1px solid var(--border);
+
+}
+
+
+
+
+.main-content li{
+
+    color:var(--secondary);
+
+    margin:10px;
+
+}
+
+
+
+
+
+
+
+/* ================= Responsive ================= */
+
+
+@media(max-width:1000px){
+
+
+    .sidebar{
+
+        width:200px;
+
+    }
+
+
+    .main-content{
+
+        margin-left:200px;
+
+        width:calc(100% - 200px);
+
+    }
+
+
+    .main-content > section:nth-of-type(3){
+
+        grid-template-columns:1fr;
+
+    }
+
+
+}
+
+
+
+
+@media(max-width:750px){
+
+
+    .dashboard-container{
+
+        flex-direction:column;
+
+    }
+
+
+
+    .sidebar{
+
+        position:relative;
+
+        width:100%;
+
+        height:auto;
+
+    }
+
+
+
+
+    .main-content{
+
+        margin-left:0;
+
+        width:100%;
+
+        padding:20px;
+
+    }
+
+
+
+    header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+
+    }
+
+
+
+    header input{
+
+        width:100%;
+
+    }
+
+
+    section select{
+
+        width:100%;
+
+        margin-bottom:10px;
+
+    }
+
+
+
+}
+
+
+
+@media(max-width:500px){
+
+
+    header h1{
+
+        font-size:25px;
+
+    }
+
+
+    article h2{
+
+        font-size:25px;
+
+    }
+
+
+}</style>
+   
 </head>
 
 <body>
