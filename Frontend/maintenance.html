@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Management | TransitOps</title>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <h2>🚚 TransitOps</h2>
+
+        <ul>
+
+            <li><a href="dashboard.html">Dashboard</a></li>
+
+            <li><a href="vehicles.html">Vehicle Registry</a></li>
+
+            <li><a href="drivers.html">Driver Management</a></li>
+
+            <li><a href="trips.html">Trip Management</a></li>
+
+            <li><a href="maintenance.html">Maintenance</a></li>
+
+            <li><a href="fuel-expenses.html">Fuel & Expenses</a></li>
+
+            <li><a href="reports.html">Reports</a></li>
+
+            <li><a href="settings.html">Settings</a></li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main>
+
+        <!-- Header -->
+
+        <header>
+
+            <div>
+
+                <h1>Maintenance Management</h1>
+
+                <p>Monitor vehicle health and maintenance schedules.</p>
+
+            </div>
+
+            <div>
+
+                <button>+ Schedule Maintenance</button>
+
+                <button>Generate Report</button>
+
+            </div>
+
+        </header>
+
+        <!-- Search -->
+
+        <section>
+
+            <input type="text"
+                placeholder="Search Vehicle, Garage or Mechanic">
+
+        </section>
+
+        <!-- Filters -->
+
+        <section>
+
+            <select>
+
+                <option>Vehicle Type</option>
+
+            </select>
+
+            <select>
+
+                <option>Maintenance Status</option>
+
+            </select>
+
+            <select>
+
+                <option>Priority</option>
+
+            </select>
+
+            <button>Apply Filter</button>
+
+        </section>
+
+        <!-- KPI Cards -->
+
+        <section>
+
+            <article>
+
+                <h4>Total Requests</h4>
+
+                <h2>54</h2>
+
+            </article>
+
+            <article>
+
+                <h4>Pending</h4>
+
+                <h2>11</h2>
+
+            </article>
+
+            <article>
+
+                <h4>Completed</h4>
+
+                <h2>39</h2>
+
+            </article>
+
+            <article>
+
+                <h4>Urgent Repairs</h4>
+
+                <h2>04</h2>
+
+            </article>
+
+        </section>
+
+        <!-- Maintenance Table -->
+
+        <section>
+
+            <h2>Maintenance Records</h2>
+
+            <table border="1">
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Vehicle</th>
+
+                    <th>Issue</th>
+
+                    <th>Priority</th>
+
+                    <th>Garage</th>
+
+                    <th>Date</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+                <tr>
+
+                    <td>M001</td>
+
+                    <td>TRK-102</td>
+
+                    <td>Engine Service</td>
+
+                    <td>High</td>
+
+                    <td>Metro Garage</td>
+
+                    <td>15 Jul</td>
+
+                    <td>In Progress</td>
+
+                    <td>
+
+                        <button>View</button>
+
+                        <button>Edit</button>
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>M002</td>
+
+                    <td>TRK-215</td>
+
+                    <td>Brake Replacement</td>
+
+                    <td>Medium</td>
+
+                    <td>Speed Motors</td>
+
+                    <td>18 Jul</td>
+
+                    <td>Pending</td>
+
+                    <td>
+
+                        <button>View</button>
+
+                        <button>Edit</button>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+        <!-- Upcoming Maintenance -->
+
+        <section>
+
+            <h2>Upcoming Maintenance</h2>
+
+            <ul>
+
+                <li>TRK-120 - Oil Change - 20 July</li>
+
+                <li>TRK-089 - Wheel Alignment - 22 July</li>
+
+                <li>TRK-300 - Battery Inspection - 24 July</li>
+
+            </ul>
+
+        </section>
+
+        <!-- Vehicle Health -->
+
+        <section>
+
+            <h2>Fleet Health Overview</h2>
+
+            <table border="1">
+
+                <tr>
+
+                    <th>Vehicle</th>
+
+                    <th>Health Score</th>
+
+                    <th>Last Service</th>
+
+                    <th>Next Service</th>
+
+                </tr>
+
+                <tr>
+
+                    <td>TRK-102</td>
+
+                    <td>92%</td>
+
+                    <td>10 June</td>
+
+                    <td>10 August</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>TRK-215</td>
+
+                    <td>71%</td>
+
+                    <td>25 May</td>
+
+                    <td>25 July</td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+        <!-- Mechanics -->
+
+        <section>
+
+            <h2>Assigned Mechanics</h2>
+
+            <table border="1">
+
+                <tr>
+
+                    <th>Name</th>
+
+                    <th>Specialization</th>
+
+                    <th>Assigned Jobs</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+                <tr>
+
+                    <td>Arjun Das</td>
+
+                    <td>Engine</td>
+
+                    <td>5</td>
+
+                    <td>Available</td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Ravi Kumar</td>
+
+                    <td>Electrical</td>
+
+                    <td>3</td>
+
+                    <td>Busy</td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+        <!-- Alerts -->
+
+        <section>
+
+            <h2>Maintenance Alerts</h2>
+
+            <ul>
+
+                <li>⚠ TRK-215 requires immediate brake replacement.</li>
+
+                <li>⚠ TRK-330 service overdue by 5 days.</li>
+
+                <li>⚠ Engine inspection pending for TRK-110.</li>
+
+            </ul>
+
+        </section>
+
+        <!-- Document Reminder -->
+
+        <section>
+
+            <h2>Vehicle Document Reminder</h2>
+
+            <table border="1">
+
+                <tr>
+
+                    <th>Vehicle</th>
+
+                    <th>Insurance</th>
+
+                    <th>Fitness</th>
+
+                    <th>PUC</th>
+
+                </tr>
+
+                <tr>
+
+                    <td>TRK-120</td>
+
+                    <td>Expires in 8 Days</td>
+
+                    <td>Valid</td>
+
+                    <td>Expires Tomorrow</td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+        <!-- Analytics -->
+
+        <section>
+
+            <h2>Maintenance Analytics</h2>
+
+            <div>
+
+                <p>Monthly Maintenance Cost Chart</p>
+
+            </div>
+
+            <div>
+
+                <p>Vehicle Downtime Chart</p>
+
+            </div>
+
+        </section>
+
+        <!-- Quick Actions -->
+
+        <section>
+
+            <h2>Quick Actions</h2>
+
+            <button>Schedule Service</button>
+
+            <button>Add Workshop</button>
+
+            <button>Assign Mechanic</button>
+
+            <button>Download Report</button>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

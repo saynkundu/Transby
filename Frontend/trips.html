@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Trip Management | TransitOps</title>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+
+    <aside>
+
+        <h2>🚚 TransitOps</h2>
+
+        <ul>
+
+            <li><a href="dashboard.html">Dashboard</a></li>
+
+            <li><a href="vehicles.html">Vehicle Registry</a></li>
+
+            <li><a href="drivers.html">Driver Management</a></li>
+
+            <li><a href="trips.html">Trip Management</a></li>
+
+            <li><a href="maintenance.html">Maintenance</a></li>
+
+            <li><a href="fuel-expenses.html">Fuel & Expenses</a></li>
+
+            <li><a href="reports.html">Reports & Analytics</a></li>
+
+            <li><a href="settings.html">Settings</a></li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main>
+
+        <!-- Header -->
+
+        <header>
+
+            <div>
+
+                <h1>Trip Management</h1>
+
+                <p>Manage, assign and monitor all fleet trips.</p>
+
+            </div>
+
+            <div>
+
+                <button>+ Create New Trip</button>
+
+                <button>Export Trips</button>
+
+            </div>
+
+        </header>
+
+        <!-- Search -->
+
+        <section>
+
+            <input
+                type="text"
+                placeholder="Search Trip, Vehicle or Driver">
+
+        </section>
+
+        <!-- Filters -->
+
+        <section>
+
+            <select>
+
+                <option>Trip Status</option>
+
+            </select>
+
+            <select>
+
+                <option>Driver</option>
+
+            </select>
+
+            <select>
+
+                <option>Vehicle</option>
+
+            </select>
+
+            <select>
+
+                <option>Route</option>
+
+            </select>
+
+            <button>Apply Filter</button>
+
+        </section>
+
+        <!-- KPI Cards -->
+
+        <section>
+
+            <article>
+
+                <h4>Total Trips</h4>
+
+                <h2>382</h2>
+
+            </article>
+
+            <article>
+
+                <h4>Active Trips</h4>
+
+                <h2>29</h2>
+
+            </article>
+
+            <article>
+
+                <h4>Completed</h4>
+
+                <h2>341</h2>
+
+            </article>
+
+            <article>
+
+                <h4>Cancelled</h4>
+
+                <h2>12</h2>
+
+            </article>
+
+        </section>
+
+        <!-- Trip Table -->
+
+        <section>
+
+            <h2>Trip Records</h2>
+
+            <table border="1">
+
+                <tr>
+
+                    <th>Trip ID</th>
+
+                    <th>Vehicle</th>
+
+                    <th>Driver</th>
+
+                    <th>Source</th>
+
+                    <th>Destination</th>
+
+                    <th>Departure</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+                <tr>
+
+                    <td>TR001</td>
+
+                    <td>TRK-101</td>
+
+                    <td>Rahul Sharma</td>
+
+                    <td>Kolkata</td>
+
+                    <td>Durgapur</td>
+
+                    <td>10:30 AM</td>
+
+                    <td>In Transit</td>
+
+                    <td>
+
+                        <button>View</button>
+
+                        <button>Edit</button>
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>TR002</td>
+
+                    <td>TRK-205</td>
+
+                    <td>Amit Roy</td>
+
+                    <td>Howrah</td>
+
+                    <td>Siliguri</td>
+
+                    <td>08:15 AM</td>
+
+                    <td>Completed</td>
+
+                    <td>
+
+                        <button>View</button>
+
+                        <button>Edit</button>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+        <!-- Live Trip Tracking -->
+
+        <section>
+
+            <h2>Live Trip Tracking</h2>
+
+            <p>📍 Map Placeholder</p>
+
+            <p>Vehicle Location, ETA and Route will appear here.</p>
+
+        </section>
+
+        <!-- Trip Timeline -->
+
+        <section>
+
+            <h2>Trip Timeline</h2>
+
+            <ul>
+
+                <li>Trip Created</li>
+
+                <li>Driver Assigned</li>
+
+                <li>Vehicle Dispatched</li>
+
+                <li>In Transit</li>
+
+                <li>Delivered</li>
+
+            </ul>
+
+        </section>
+
+        <!-- Driver & Vehicle Assignment -->
+
+        <section>
+
+            <h2>Assignments</h2>
+
+            <table border="1">
+
+                <tr>
+
+                    <th>Trip</th>
+
+                    <th>Driver</th>
+
+                    <th>Vehicle</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+                <tr>
+
+                    <td>TR001</td>
+
+                    <td>Rahul Sharma</td>
+
+                    <td>TRK-101</td>
+
+                    <td>Assigned</td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+        <!-- Delivery Performance -->
+
+        <section>
+
+            <h2>Delivery Performance</h2>
+
+            <table border="1">
+
+                <tr>
+
+                    <th>Route</th>
+
+                    <th>Trips</th>
+
+                    <th>On Time</th>
+
+                    <th>Delayed</th>
+
+                </tr>
+
+                <tr>
+
+                    <td>Kolkata → Durgapur</td>
+
+                    <td>84</td>
+
+                    <td>79</td>
+
+                    <td>5</td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+        <!-- Alerts -->
+
+        <section>
+
+            <h2>Trip Alerts</h2>
+
+            <ul>
+
+                <li>⚠ Trip TR014 delayed by 35 minutes.</li>
+
+                <li>⚠ Driver exceeded driving limit.</li>
+
+                <li>⚠ Vehicle TRK-220 stopped unexpectedly.</li>
+
+            </ul>
+
+        </section>
+
+        <!-- Analytics -->
+
+        <section>
+
+            <h2>Trip Analytics</h2>
+
+            <div>
+
+                <p>Trip Completion Chart</p>
+
+            </div>
+
+            <div>
+
+                <p>Route Performance Chart</p>
+
+            </div>
+
+        </section>
+
+        <!-- Quick Actions -->
+
+        <section>
+
+            <h2>Quick Actions</h2>
+
+            <button>Create Trip</button>
+
+            <button>Assign Driver</button>
+
+            <button>Assign Vehicle</button>
+
+            <button>Track Live</button>
+
+            <button>Download Report</button>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
