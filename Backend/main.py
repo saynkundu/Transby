@@ -153,11 +153,11 @@ def vehicles_page(
     vehicles = db.query(Vehicle).all()
 
     return templates.TemplateResponse(
-        "vehicles.html",
+        
         {
             "request": request,
             "vehicles": vehicles
-        }
+        },"vehicles.html"
     )
 
 @app.delete("/api/vehicle/{vehicle_id}")
