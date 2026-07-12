@@ -293,8 +293,14 @@
                         role: document.getElementById('role').value
                     })
                 });
-                const result = await response.json();
-                if (!response.ok) throw new Error(result.detail || 'Unable to create the account.');
+                let result;
+                const text = await response.text();
+                try {
+                    result = text ? JSON.parse(text) : {};
+                } catch {
+                    result = { detail: text };
+                }
+                if (!response.ok) throw new Error(result.detail || result.message || 'Unable to create the account.');
                 alert(result.message);
                 window.location.href = '/';
             } catch (error) {

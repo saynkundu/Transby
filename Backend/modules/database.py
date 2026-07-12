@@ -252,6 +252,9 @@ class MaintenanceLog(Base):
     )
 
     vehicle = relationship("Vehicle", back_populates="maintenance_logs")
+    
+    mechanic_id = Column(Integer, ForeignKey("mechanics.mechanic_id"), nullable=True)
+    mechanic = relationship("Mechanic", back_populates="maintenance_logs")
 
 
 # =====================================================
@@ -358,17 +361,7 @@ class Mechanic(Base):
         ),
         default="Available"
     )
-
-maintenance_logs = relationship(
+    maintenance_logs = relationship(
         "MaintenanceLog",
         back_populates="mechanic"
     )
-
-mechanic_id = Column(
-    Integer,
-    ForeignKey("mechanics.mechanic_id")
-)
-mechanic = relationship(
-    "Mechanic",
-    back_populates="maintenance_logs"
-)
