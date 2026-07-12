@@ -352,7 +352,299 @@ main > section:last-child {
         display: block;
         overflow-x: auto;
     }
-}</style>
+}
+/* ===========================================
+        FUEL & EXPENSE MODALS
+=========================================== */
+
+.modal{
+    display:none;
+    position:fixed;
+    z-index:9999;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.65);
+    overflow-y:auto;
+    padding:40px 20px;
+}
+
+.modal-content{
+
+    width:95%;
+    max-width:900px;
+
+    margin:auto;
+
+    background:var(--card);
+
+    color:var(--text);
+
+    border-radius:18px;
+
+    padding:30px;
+
+    border:1px solid var(--border);
+
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+
+    animation:popup .35s ease;
+
+}
+
+@keyframes popup{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(-30px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.close{
+
+    float:right;
+
+    font-size:32px;
+
+    cursor:pointer;
+
+    color:var(--secondary);
+
+}
+
+.close:hover{
+
+    color:#ef4444;
+
+}
+
+.modal-content h2{
+
+    margin-bottom:25px;
+
+    color:var(--primary);
+
+}
+
+.modal-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:18px;
+
+}
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.full-width{
+
+    grid-column:1/-1;
+
+}
+
+.form-group label{
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+
+    width:100%;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    border:1px solid var(--border);
+
+    background:var(--input);
+
+    color:var(--text);
+
+    outline:none;
+
+}
+
+.form-group textarea{
+
+    resize:vertical;
+
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 8px rgba(6,182,212,.35);
+
+}
+
+.modal-buttons{
+
+    margin-top:25px;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+}
+
+.modal-buttons button{
+
+    padding:12px 24px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.modal-buttons button:first-child{
+
+    background:#64748B;
+
+    color:white;
+
+}
+
+.modal-buttons button:last-child{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+.modal-buttons button:last-child:hover{
+
+    background:var(--hover);
+
+}
+
+@media(max-width:768px){
+
+.modal-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.modal-content{
+
+padding:20px;
+
+}
+
+.modal-buttons{
+
+flex-direction:column;
+
+}
+
+.modal-buttons button{
+
+width:100%;
+
+}
+
+}
+</style>
+<script>
+
+// ==========================
+// Fuel Modal
+// ==========================
+
+function openFuelModal() {
+    document.getElementById("fuelModal").style.display = "block";
+}
+
+function closeFuelModal() {
+    document.getElementById("fuelModal").style.display = "none";
+}
+
+// ==========================
+// Expense Modal
+// ==========================
+
+function openExpenseModal() {
+    document.getElementById("expenseModal").style.display = "block";
+}
+
+function closeExpenseModal() {
+    document.getElementById("expenseModal").style.display = "none";
+}
+
+// ==========================
+// Close Modal (Outside Click)
+// ==========================
+
+window.onclick = function(event){
+
+    let fuelModal = document.getElementById("fuelModal");
+    let expenseModal = document.getElementById("expenseModal");
+
+    if(event.target == fuelModal){
+        fuelModal.style.display = "none";
+    }
+
+    if(event.target == expenseModal){
+        expenseModal.style.display = "none";
+    }
+
+}
+
+// ==========================
+// ESC Key Close
+// ==========================
+
+document.addEventListener("keydown", function(event){
+
+    if(event.key === "Escape"){
+
+        closeFuelModal();
+
+        closeExpenseModal();
+
+    }
+
+});
+
+</script>
 <body>
 
     <div class="container">
@@ -403,11 +695,13 @@ main > section:last-child {
 
                 <div>
 
-                    <button>+ Add Fuel Entry</button>
+                   <button onclick="openFuelModal()">
+        ⛽ Add Fuel Entry
+    </button>
 
-                    <button>+ Add Expense</button>
-
-                    <button>Export PDF</button>
+    <button onclick="openExpenseModal()">
+        💰 Add Expense
+    </button>
 
                 </div>
 
@@ -637,20 +931,204 @@ main > section:last-child {
 
             <!-- Quick Actions -->
 
-            <section>
+            
+<!-- ==========================
+      FUEL ENTRY MODAL
+========================== -->
 
-                <h2>Quick Actions</h2>
+<div id="fuelModal" class="modal">
 
-                <button>Add Fuel Entry</button>
+<div class="modal-content">
 
-                <button>Add Expense</button>
+<span class="close" onclick="closeFuelModal()">&times;</span>
 
-                <button>Download Report</button>
+<h2>Add Fuel Entry</h2>
 
-                <button>View Analytics</button>
+<form>
 
-            </section>
+<div class="modal-grid">
 
+<div class="form-group">
+<label>Fuel Date</label>
+<input type="date">
+</div>
+
+<div class="form-group">
+<label>Vehicle</label>
+<select>
+<option>Select Vehicle</option>
+<option>TRK-101</option>
+<option>TRK-205</option>
+<option>TRK-301</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Driver</label>
+<input type="text" placeholder="Driver Name">
+</div>
+
+<div class="form-group">
+<label>Fuel Type</label>
+<select>
+<option>Diesel</option>
+<option>Petrol</option>
+<option>CNG</option>
+<option>Electric</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Fuel Quantity (L)</label>
+<input type="number">
+</div>
+
+<div class="form-group">
+<label>Price per Liter</label>
+<input type="number">
+</div>
+
+<div class="form-group">
+<label>Total Cost</label>
+<input type="number">
+</div>
+
+<div class="form-group">
+<label>Mileage</label>
+<input type="number">
+</div>
+
+<div class="form-group full-width">
+<label>Remarks</label>
+<textarea rows="4"></textarea>
+</div>
+
+</div>
+
+<div class="modal-buttons">
+
+<button type="button" onclick="closeFuelModal()">
+Cancel
+</button>
+
+<button type="submit">
+Save Fuel Entry
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+<!-- ==========================
+      ADD EXPENSE MODAL
+========================== -->
+
+<div id="expenseModal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close" onclick="closeExpenseModal()">&times;</span>
+
+        <h2>Add Expense</h2>
+
+        <form>
+
+            <div class="modal-grid">
+
+                <div class="form-group">
+                    <label>Expense Date</label>
+                    <input type="date">
+                </div>
+
+                <div class="form-group">
+                    <label>Vehicle</label>
+                    <select>
+                        <option>Select Vehicle</option>
+                        <option>TRK-101</option>
+                        <option>TRK-205</option>
+                        <option>TRK-301</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Driver</label>
+                    <input type="text" placeholder="Driver Name">
+                </div>
+
+                <div class="form-group">
+                    <label>Expense Type</label>
+                    <select>
+                        <option>Maintenance</option>
+                        <option>Toll Tax</option>
+                        <option>Parking</option>
+                        <option>Insurance</option>
+                        <option>Repair</option>
+                        <option>Tyre</option>
+                        <option>Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number">
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select>
+                        <option>Cash</option>
+                        <option>UPI</option>
+                        <option>Card</option>
+                        <option>Bank Transfer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Vendor</label>
+                    <input type="text" placeholder="Vendor Name">
+                </div>
+
+                <div class="form-group">
+                    <label>Status</label>
+                    <select>
+                        <option>Paid</option>
+                        <option>Pending</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Description</label>
+                    <textarea rows="4"></textarea>
+                </div>
+
+            </div>
+
+            <div class="modal-buttons">
+
+                <button
+                    type="button"
+                    onclick="closeExpenseModal()">
+
+                    Cancel
+
+                </button>
+
+                <button type="submit">
+
+                    Save Expense
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
         </main>
 
     </div>
