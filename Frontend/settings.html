@@ -6,6 +6,665 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings | TransitOps</title>
 </head>
+<style>/* =====================================
+   TransitOps Settings Page
+   Light + Dark Mode
+===================================== */
+
+
+:root{
+
+    --background:#F8FAFC;
+    --card:#FFFFFF;
+    --sidebar:#0F172A;
+    --input:#F1F5F9;
+
+    --text:#0F172A;
+    --secondary:#64748B;
+
+    --primary:#06B6D4;
+    --hover:#0891B2;
+
+    --border:rgba(6,182,212,0.25);
+
+    --danger:#EF4444;
+
+}
+
+
+
+.dark-mode{
+
+    --background:#0B1120;
+    --card:#111827;
+    --sidebar:#020617;
+    --input:#0F172A;
+
+    --text:#F8FAFC;
+    --secondary:#94A3B8;
+
+    --primary:#06B6D4;
+    --hover:#0891B2;
+
+    --border:rgba(6,182,212,0.25);
+
+}
+
+
+
+
+
+
+
+*{
+
+    margin:0;
+    padding:0;
+
+    box-sizing:border-box;
+
+    font-family:"Poppins",sans-serif;
+
+}
+
+
+
+
+
+body{
+
+    background:var(--background);
+
+    color:var(--text);
+
+}
+
+
+
+
+
+
+
+/* Layout */
+
+
+.container{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+
+
+
+
+
+
+
+/* Sidebar */
+
+
+aside{
+
+    width:260px;
+
+    height:100vh;
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    background:var(--sidebar);
+
+    padding:25px 20px;
+
+}
+
+
+
+
+aside h2{
+
+    color:white;
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+}
+
+
+
+
+
+aside ul{
+
+    list-style:none;
+
+}
+
+
+
+
+
+aside li{
+
+    margin:12px 0;
+
+}
+
+
+
+
+
+aside a{
+
+    text-decoration:none;
+
+    display:block;
+
+    padding:13px 15px;
+
+    border-radius:10px;
+
+    color:#CBD5E1;
+
+    transition:.3s;
+
+}
+
+
+
+
+
+
+aside a:hover{
+
+    background:rgba(6,182,212,.15);
+
+    color:var(--primary);
+
+    transform:translateX(5px);
+
+}
+
+
+
+
+
+
+
+aside li.active a{
+
+    background:var(--primary);
+
+    color:white;
+
+    box-shadow:0 0 15px rgba(6,182,212,.45);
+
+}
+
+
+
+
+
+aside li.active a:hover{
+
+    transform:none;
+
+}
+
+
+
+
+
+
+
+
+/* Main */
+
+
+main{
+
+    margin-left:260px;
+
+    width:calc(100% - 260px);
+
+    padding:30px;
+
+}
+
+
+
+
+
+
+
+
+/* Header */
+
+
+header{
+
+    margin-bottom:30px;
+
+}
+
+
+
+header h1{
+
+    font-size:32px;
+
+}
+
+
+
+
+
+header p{
+
+    color:var(--secondary);
+
+}
+
+
+
+
+
+
+
+
+/* All Sections */
+
+
+main section{
+
+    background:var(--card);
+
+    padding:25px;
+
+    margin-bottom:25px;
+
+    border-radius:15px;
+
+    border:1px solid var(--border);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+
+}
+
+
+
+
+main section h2{
+
+    margin-bottom:20px;
+
+    color:var(--text);
+
+}
+
+
+
+
+
+
+
+
+/* Profile */
+
+
+section img{
+
+    border-radius:50%;
+
+    margin-bottom:15px;
+
+    border:3px solid var(--primary);
+
+}
+
+
+
+
+
+
+section p{
+
+    color:var(--secondary);
+
+    margin:8px 0;
+
+}
+
+
+
+
+
+
+
+/* Buttons */
+
+
+button{
+
+    background:var(--primary);
+
+    color:white;
+
+    border:none;
+
+    padding:12px 18px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    margin:8px 5px 0 0;
+
+    transition:.3s;
+
+}
+
+
+
+
+
+button:hover{
+
+    background:var(--hover);
+
+}
+
+
+
+
+
+
+
+
+/* Table */
+
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:var(--card);
+
+}
+
+
+
+
+
+th{
+
+    background:var(--primary);
+
+    color:white;
+
+    padding:14px;
+
+}
+
+
+
+
+
+td{
+
+    padding:14px;
+
+    text-align:center;
+
+    color:var(--text);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+
+
+
+
+
+
+
+/* Checkbox */
+
+
+label{
+
+    color:var(--secondary);
+
+}
+
+
+
+input[type="checkbox"]{
+
+    width:18px;
+
+    height:18px;
+
+    accent-color:var(--primary);
+
+}
+
+
+
+
+
+
+
+
+/* Select */
+
+
+select{
+
+    padding:12px 15px;
+
+    border-radius:10px;
+
+    background:var(--input);
+
+    color:var(--text);
+
+    border:1px solid var(--border);
+
+}
+
+
+
+
+
+
+
+/* Lists */
+
+
+section ul{
+
+    padding-left:25px;
+
+}
+
+
+
+section li{
+
+    margin:10px 0;
+
+    color:var(--secondary);
+
+}
+
+
+
+
+
+
+
+
+/* Appearance buttons */
+
+
+section:nth-last-of-type(5) button{
+
+    padding:14px 22px;
+
+}
+
+
+
+
+
+
+
+
+/* Danger Zone */
+
+
+main section:last-child{
+
+    border:1px solid rgba(239,68,68,.4);
+
+}
+
+
+
+main section:last-child h2{
+
+    color:#EF4444;
+
+}
+
+
+
+main section:last-child button:first-of-type{
+
+    background:#EF4444;
+
+}
+
+
+
+main section:last-child button:first-of-type:hover{
+
+    background:#DC2626;
+
+}
+
+
+
+
+
+
+
+
+/* Responsive */
+
+
+@media(max-width:1000px){
+
+
+    aside{
+
+        width:210px;
+
+    }
+
+
+
+    main{
+
+        margin-left:210px;
+
+        width:calc(100% - 210px);
+
+    }
+
+
+}
+
+
+
+
+
+
+
+@media(max-width:750px){
+
+
+    .container{
+
+        flex-direction:column;
+
+    }
+
+
+
+
+
+    aside{
+
+        position:relative;
+
+        width:100%;
+
+        height:auto;
+
+    }
+
+
+
+
+
+    main{
+
+        margin-left:0;
+
+        width:100%;
+
+        padding:20px;
+
+    }
+
+
+
+
+
+    table{
+
+        display:block;
+
+        overflow-x:auto;
+
+    }
+
+
+
+
+
+    button{
+
+        width:100%;
+
+        margin-top:10px;
+
+    }
+
+
+}</style>
 
 <body>
 
@@ -31,9 +690,9 @@
 
             <li><a href="/fuel-expenses">Fuel & Expenses</a></li>
 
-            <li><a href="/reports">Reports & Analytics</a></li>
+            <li><a href="/reports">Reports</a></li>
 
-            <li><a href="/settings">Settings</a></li>
+            <li class="active"><a href="/settings">Settings</a></li>
 
         </ul>
 
