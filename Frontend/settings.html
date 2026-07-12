@@ -2,14 +2,9 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings | TransitOps</title>
-
 </head>
 
 <body>
@@ -44,7 +39,7 @@
 
     </aside>
 
-    <!-- Main -->
+    <!-- Main Content -->
 
     <main>
 
@@ -52,13 +47,9 @@
 
         <header>
 
-            <div>
+            <h1>Settings</h1>
 
-                <h1>Settings</h1>
-
-                <p>Manage your account and system preferences.</p>
-
-            </div>
+            <p>Manage your TransitOps account and preferences.</p>
 
         </header>
 
@@ -68,20 +59,19 @@
 
             <h2>Profile Information</h2>
 
-            <img src="assets/avatars/admin.png"
-                alt="Admin">
+            <img src="assets/avatars/admin.png" alt="Profile" width="100">
 
-            <p>Name : Fleet Administrator</p>
+            <p><strong>Name:</strong> Fleet Administrator</p>
 
-            <p>Email : admin@transitops.com</p>
+            <p><strong>Email:</strong> admin@transitops.com</p>
 
-            <p>Role : Administrator</p>
+            <p><strong>Role:</strong> Administrator</p>
 
             <button>Edit Profile</button>
 
         </section>
 
-        <!-- Account Settings -->
+        <!-- Account -->
 
         <section>
 
@@ -91,11 +81,11 @@
 
             <button>Update Email</button>
 
-            <button>Enable Two Factor Authentication</button>
+            <button>Enable Two-Factor Authentication</button>
 
         </section>
 
-        <!-- Role Management -->
+        <!-- User Management -->
 
         <section>
 
@@ -104,96 +94,43 @@
             <table border="1">
 
                 <tr>
-
                     <th>User</th>
-
                     <th>Role</th>
-
                     <th>Status</th>
-
                     <th>Action</th>
-
                 </tr>
 
                 <tr>
-
-                    <td>Rahul</td>
-
+                    <td>Rahul Sharma</td>
                     <td>Driver</td>
-
                     <td>Active</td>
-
-                    <td>
-
-                        <button>Edit Role</button>
-
-                    </td>
-
+                    <td><button>Edit Role</button></td>
                 </tr>
 
                 <tr>
-
-                    <td>Priya</td>
-
+                    <td>Priya Roy</td>
                     <td>Dispatcher</td>
-
                     <td>Active</td>
-
-                    <td>
-
-                        <button>Edit Role</button>
-
-                    </td>
-
+                    <td><button>Edit Role</button></td>
                 </tr>
 
             </table>
 
         </section>
 
-        <!-- Notification Settings -->
+        <!-- Notifications -->
 
         <section>
 
-            <h2>Notifications</h2>
+            <h2>Notification Preferences</h2>
 
-            <label>
+            <label><input type="checkbox"> Email Notifications</label><br><br>
 
-                <input type="checkbox">
+            <label><input type="checkbox"> Maintenance Alerts</label><br><br>
 
-                Email Notifications
+            <label><input type="checkbox"> Trip Alerts</label><br><br>
 
-            </label>
-
-            <br><br>
-
-            <label>
-
-                <input type="checkbox">
-
-                Maintenance Alerts
-
-            </label>
-
-            <br><br>
-
-            <label>
-
-                <input type="checkbox">
-
-                Trip Notifications
-
-            </label>
-
-            <br><br>
-
-            <label>
-
-                <input type="checkbox">
-
-                Fuel Expense Alerts
-
-            </label>
+            <label><input type="checkbox"> Fuel Alerts</label>
 
         </section>
 
@@ -219,19 +156,19 @@
 
                 <option>English</option>
 
-                <option>Hindi</option>
-
                 <option>Bengali</option>
+
+                <option>Hindi</option>
 
             </select>
 
         </section>
 
-        <!-- Data Management -->
+        <!-- Backup -->
 
         <section>
 
-            <h2>Data Management</h2>
+            <h2>Backup & Restore</h2>
 
             <button>Backup Database</button>
 
@@ -249,9 +186,9 @@
 
             <ul>
 
-                <li>Email Service : Connected</li>
-
                 <li>GPS Tracking : Connected</li>
+
+                <li>Email Service : Connected</li>
 
                 <li>Cloud Storage : Connected</li>
 
@@ -259,17 +196,39 @@
 
         </section>
 
-        <!-- System Information -->
+        <!-- System Status -->
 
         <section>
 
-            <h2>System Information</h2>
+            <h2>System Status</h2>
+
+            <p>🟢 Server Running</p>
+
+            <p>🟢 Database Connected</p>
+
+            <p>🟢 GPS Service Online</p>
 
             <p>Version : 1.0.0</p>
 
-            <p>Last Update : July 2026</p>
+        </section>
 
-            <p>Status : Running</p>
+        <!-- Activity Log -->
+
+        <section>
+
+            <h2>Recent Activity</h2>
+
+            <ul>
+
+                <li>Admin updated Driver Role</li>
+
+                <li>Fuel Report Exported</li>
+
+                <li>Maintenance Schedule Updated</li>
+
+                <li>New Vehicle Added</li>
+
+            </ul>
 
         </section>
 
@@ -279,15 +238,55 @@
 
             <h2>Danger Zone</h2>
 
-            <button>Delete Account</button>
+            <p>Be careful. These actions cannot be undone.</p>
 
-            <button>Logout</button>
+            <button onclick="deleteAccount()">
+
+                Delete Account
+
+            </button>
+
+            <button onclick="logout()">
+
+                Logout
+
+            </button>
 
         </section>
 
     </main>
 
 </div>
+
+<script>
+
+function deleteAccount(){
+
+    let confirmDelete = confirm("Are you sure you want to delete your account?");
+
+    if(confirmDelete){
+
+        alert("Account deleted successfully.");
+
+        window.location.href = "register.html";
+
+    }
+
+}
+
+function logout(){
+
+    let confirmLogout = confirm("Do you really want to logout?");
+
+    if(confirmLogout){
+
+        window.location.href = "index.html";
+
+    }
+
+}
+
+</script>
 
 </body>
 

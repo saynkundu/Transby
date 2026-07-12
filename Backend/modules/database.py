@@ -13,7 +13,7 @@ from sqlalchemy import (
 
 from sqlalchemy.orm import relationship
 
-from database import Base
+from modules.db import Base
 
 from datetime import datetime
 
@@ -46,6 +46,8 @@ class User(Base):
     full_name = Column(String(100), nullable=False)
 
     email = Column(String(120), unique=True, nullable=False)
+
+    phone = Column(String(30), nullable=True)
 
     password_hash = Column(String(255), nullable=False)
 
