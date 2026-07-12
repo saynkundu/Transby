@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TransitOps | Login</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div id="login-container">
+
+        <!-- Left Side -->
+        <section id="left-section">
+
+            <!-- Logo -->
+            <div id="logo">
+
+                <i class="fa-solid fa-truck-fast"></i>
+
+                <div>
+
+                    <h1>TransitOps</h1>
+
+                    <p>Smart Transport Operations Platform</p>
+
+                </div>
+
+            </div>
+
+            <!-- Heading -->
+            <div id="welcome-text">
+
+                <h2>Sign in to your account</h2>
+
+                <p>Enter your credentials to continue</p>
+
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form">
+
+                <!-- Email -->
+
+                <div class="input-group">
+
+                    <label for="email">Email</label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <!-- Password -->
+
+                <div class="input-group">
+
+                    <label for="password">Password</label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            required>
+
+                        <button
+                            type="button"
+                            id="toggle-password">
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- Role -->
+
+                <div class="input-group">
+
+                    <label for="role">
+
+                        Role (RBAC)
+
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-user-shield"></i>
+
+                        <select id="role" required>
+
+                            <option value="" selected disabled>Select Role</option>
+
+                            <option>Fleet Manager</option>
+
+                            <option>Dispatcher</option>
+
+                            <option>Safety Officer</option>
+
+                            <option>Financial Analyst</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <!-- Options -->
+
+                <div id="login-options">
+
+                    <label>
+
+                        <input type="checkbox">
+
+                        Remember Me
+
+                    </label>
+
+                    <a href="#">Forgot Password?</a>
+
+                </div>
+
+                <!-- Login Button -->
+
+                <button
+                    type="submit"
+                    id="login-btn">
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                    Sign In
+
+                </button>
+
+            </form>
+
+            <!-- Divider -->
+
+            <div id="divider">
+
+                <span>OR</span>
+
+            </div>
+
+            <!-- Register -->
+
+            <div id="register">
+
+                <p>
+
+                    Don't have an account?
+
+                    <a href="register.html">
+
+                        Register Here
+
+                    </a>
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- Right Side -->
+
+        <aside id="right-section">
+
+            <div id="illustration-container">
+
+                <!-- Replace this image with your own illustration -->
+
+                <img
+                    src="assets/login-illustration.png"
+                    alt="TransitOps Illustration">
+
+                <h2>Welcome to TransitOps</h2>
+
+                <p>
+
+                    Manage your fleet, drivers, trips, maintenance,
+                    fuel expenses and reports from one centralized platform.
+
+                </p>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</body>
+
+</html>
