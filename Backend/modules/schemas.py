@@ -17,9 +17,10 @@ class Login(BaseModel):
 class Register(BaseModel):
     full_name: str
     email: EmailStr
+    phone: Optional[str] = None
     password: str
     confirm_password: str
-    role_id: int
+    role: str
 
 
 # =====================================================
