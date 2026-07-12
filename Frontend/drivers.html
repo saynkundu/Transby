@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Management | TransitOps</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Sidebar -->
+
+        <aside>
+
+            <h2>🚚 TransitOps</h2>
+
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="vehicles.html">Vehicle Registry</a></li>
+                <li><a href="drivers.html">Driver Management</a></li>
+                <li><a href="trips.html">Trip Management</a></li>
+                <li><a href="maintenance.html">Maintenance</a></li>
+                <li><a href="fuel-expenses.html">Fuel & Expenses</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+
+        </aside>
+
+        <!-- Main Content -->
+
+        <main>
+
+            <!-- Header -->
+
+            <header>
+
+                <div>
+
+                    <h1>Driver Management</h1>
+
+                    <p>Manage all drivers and monitor their activity.</p>
+
+                </div>
+
+                <div>
+
+                    <input type="text" placeholder="Search Driver">
+
+                    <button>+ Add Driver</button>
+
+                </div>
+
+            </header>
+
+            <!-- Filters -->
+
+            <section>
+
+                <select>
+                    <option>All Status</option>
+                    <option>Available</option>
+                    <option>On Trip</option>
+                    <option>Off Duty</option>
+                </select>
+
+                <select>
+                    <option>License Status</option>
+                    <option>Valid</option>
+                    <option>Expiring Soon</option>
+                    <option>Expired</option>
+                </select>
+
+                <select>
+                    <option>Region</option>
+                    <option>North</option>
+                    <option>South</option>
+                    <option>East</option>
+                    <option>West</option>
+                </select>
+
+            </section>
+
+            <!-- Statistics -->
+
+            <section>
+
+                <article>
+                    <h4>Total Drivers</h4>
+                    <h2>42</h2>
+                </article>
+
+                <article>
+                    <h4>On Duty</h4>
+                    <h2>28</h2>
+                </article>
+
+                <article>
+                    <h4>Available</h4>
+                    <h2>10</h2>
+                </article>
+
+                <article>
+                    <h4>License Expiring</h4>
+                    <h2>4</h2>
+                </article>
+
+            </section>
+
+            <!-- Driver Table -->
+
+            <section>
+
+                <h2>Driver Directory</h2>
+
+                <table border="1">
+
+                    <tr>
+
+                        <th>Photo</th>
+                        <th>Driver ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Vehicle</th>
+                        <th>Status</th>
+                        <th>License</th>
+                        <th>Rating</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>👨</td>
+                        <td>D001</td>
+                        <td>Rahul Sharma</td>
+                        <td>9876543210</td>
+                        <td>TRK-101</td>
+                        <td>On Trip</td>
+                        <td>Valid</td>
+                        <td>⭐ 4.9</td>
+                        <td>
+
+                            <button>View</button>
+
+                            <button>Edit</button>
+
+                            <button>Delete</button>
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>👨</td>
+                        <td>D002</td>
+                        <td>Amit Roy</td>
+                        <td>9831122334</td>
+                        <td>TRK-205</td>
+                        <td>Available</td>
+                        <td>Expiring Soon</td>
+                        <td>⭐ 4.8</td>
+                        <td>
+
+                            <button>View</button>
+
+                            <button>Edit</button>
+
+                            <button>Delete</button>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </section>
+
+            <!-- License Alerts -->
+
+            <section>
+
+                <h2>License Expiry Alerts</h2>
+
+                <ul>
+
+                    <li>⚠ Rahul Sharma - Expires in 15 Days</li>
+
+                    <li>⚠ Amit Roy - Expires in 7 Days</li>
+
+                    <li>⚠ Vikash Singh - Expired Yesterday</li>
+
+                </ul>
+
+            </section>
+
+            <!-- Driver Performance -->
+
+            <section>
+
+                <h2>Driver Performance</h2>
+
+                <table border="1">
+
+                    <tr>
+
+                        <th>Name</th>
+                        <th>Total Trips</th>
+                        <th>Completed</th>
+                        <th>Cancelled</th>
+                        <th>Average Rating</th>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Rahul Sharma</td>
+
+                        <td>160</td>
+
+                        <td>156</td>
+
+                        <td>4</td>
+
+                        <td>4.9</td>
+
+                    </tr>
+
+                </table>
+
+            </section>
+
+            <!-- Quick Actions -->
+
+            <section>
+
+                <h2>Quick Actions</h2>
+
+                <button>Add Driver</button>
+
+                <button>Assign Vehicle</button>
+
+                <button>Schedule Training</button>
+
+                <button>Download Driver Report</button>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
