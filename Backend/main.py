@@ -4,7 +4,6 @@ import re
 import secrets
 import smtplib
 from datetime import datetime, timedelta
-from email.mime.text import MIMEText
 from email.utils import parseaddr
 from pathlib import Path
 
@@ -12,11 +11,12 @@ from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import func, case
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
 from modules.db import Base, engine, get_db
-from modules.database import PasswordResetRequest, Role, User, Vehicle,Driver,Trip
+from modules.database import PasswordResetRequest, Role, User, Vehicle, Driver, Trip, FuelLog, Expense
 from modules.hashed_password import check_password, hashed_password
 from modules.schemas import (
     ForgotPassword,
@@ -51,8 +51,42 @@ def home(request: Request):
 
 
 @app.get("/dashboard", response_class=HTMLResponse)
-def dashboard_page(request: Request):
-    return templates.TemplateResponse(request, "dashboard.html")
+def dashboard_page(request: Request, db: Session = Depends(get_db)):
+    total_vehicles = db.query(func.count(Vehicle.vehicle_id)).scalar() or 0
+    available_vehicles = db.query(func.count(Vehicle.vehicle_id)).filter(Vehicle.status == "Available").scalar() or 0
+    maintenance_vehicles = db.query(func.count(Vehicle.vehicle_id)).filter(Vehicle.status == "In Shop").scalar() or 0
+    active_trips = db.query(func.count(Trip.trip_id)).filter(Trip.status == "Dispatched").scalar() or 0
+    pending_trips = db.query(func.count(Trip.trip_id)).filter(Trip.status == "Draft").scalar() or 0
+    drivers_on_duty = db.query(func.count(Driver.driver_id)).filter(Driver.status == "On Trip").scalar() or 0
+
+    recent_trips = (
+        db.query(Trip)
+        .order_by(Trip.created_at.desc())
+        .limit(5)
+        .all()
+    )
+
+    notifications = [
+        "Truck-08 requires maintenance.",
+        "Driver Rahul completed Trip TR018.",
+        "Fuel expense updated."
+    ]
+
+    return templates.TemplateResponse(
+        request,
+        "dashboard.html",
+        {
+            "request": request,
+            "total_vehicles": total_vehicles,
+            "available_vehicles": available_vehicles,
+            "maintenance_vehicles": maintenance_vehicles,
+            "active_trips": active_trips,
+            "pending_trips": pending_trips,
+            "drivers_on_duty": drivers_on_duty,
+            "recent_trips": recent_trips,
+            "notifications": notifications
+        }
+    )
 
 
 @app.get("/maintenance", response_class=HTMLResponse)
@@ -61,13 +95,93 @@ def maintenance_page(request: Request):
 
 
 @app.get("/fuel-expenses", response_class=HTMLResponse)
-def fuel_expenses_page(request: Request):
-    return templates.TemplateResponse(request, "fuel-expenses.html")
+def fuel_expenses_page(request: Request, db: Session = Depends(get_db)):
+    total_fuel_cost = db.query(func.coalesce(func.sum(FuelLog.fuel_cost), 0)).scalar() or 0
+    total_expenses = db.query(func.coalesce(func.sum(Expense.amount), 0)).scalar() or 0
+    fuel_entries = db.query(func.count(FuelLog.fuel_log_id)).scalar() or 0
+
+    mileage_result = (
+        db.query(func.coalesce(func.sum(Trip.actual_distance), 0), func.coalesce(func.sum(FuelLog.liters), 0))
+        .join(FuelLog, FuelLog.trip_id == Trip.trip_id)
+        .first()
+    )
+    avg_mileage = 0.0
+    if mileage_result and mileage_result[1]:
+        avg_mileage = round(mileage_result[0] / mileage_result[1], 2)
+
+    fuel_records = (
+        db.query(FuelLog)
+        .order_by(FuelLog.fuel_date.desc())
+        .limit(5)
+        .all()
+    )
+    expense_records = (
+        db.query(Expense)
+        .order_by(Expense.expense_date.desc())
+        .limit(5)
+        .all()
+    )
+    expense_categories = (
+        db.query(Expense.expense_type, func.count(Expense.expense_id).label("count"))
+            .group_by(Expense.expense_type)
+            .all()
+        )
+
+    alerts = []
+    if total_fuel_cost > 50000:
+        alerts.append("Fuel cost has exceeded ₹50,000 this period.")
+    if total_expenses > 100000:
+        alerts.append("Total expenses have exceeded ₹1,00,000 this period.")
+
+    return templates.TemplateResponse(
+        request,
+        "fuel-expenses.html",
+        {
+            "request": request,
+            "total_fuel_cost": total_fuel_cost,
+            "total_expenses": total_expenses,
+            "fuel_entries": fuel_entries,
+            "avg_mileage": avg_mileage,
+            "fuel_records": fuel_records,
+            "expense_records": expense_records,
+            "expense_categories": expense_categories,
+            "alerts": alerts
+        }
+    )
 
 
 @app.get("/settings", response_class=HTMLResponse)
-def settings_page(request: Request):
-    return templates.TemplateResponse(request, "settings.html")
+def settings_page(request: Request, db: Session = Depends(get_db)):
+    current_user = db.query(User).first()
+    profile = {
+        "name": current_user.full_name if current_user else "Fleet Administrator",
+        "email": current_user.email if current_user else "admin@transitops.com",
+        "role": current_user.role.role_name if current_user and current_user.role else "Administrator"
+    }
+    users = db.query(User).all()
+    notifications = [
+        "Admin updated Driver Role.",
+        "Fuel Report Exported.",
+        "Maintenance Schedule Updated.",
+        "New Vehicle Added."
+    ]
+    system_status = {
+        "server": "Running",
+        "database": "Connected",
+        "gps": "Online",
+        "version": "1.0.0"
+    }
+    return templates.TemplateResponse(
+        request,
+        "settings.html",
+        {
+            "request": request,
+            "profile": profile,
+            "users": users,
+            "notifications": notifications,
+            "system_status": system_status
+        }
+    )
 
 
 @app.get("/register", response_class=HTMLResponse)
@@ -98,7 +212,7 @@ def register(payload: Register, db: Session = Depends(get_db)):
         role_id=role.role_id,
     )
     db.add(user)
-    db.commit()
+    from sqlalchemy import case
     db.refresh(user)
     return {"message": "Account created successfully.", "user_id": user.user_id}
 
@@ -399,6 +513,7 @@ def drivers_page(
         })
 
     return templates.TemplateResponse(
+        request,
         "drivers.html",
         {
             "request": request,
@@ -408,11 +523,7 @@ def drivers_page(
     )
 
 @app.get("/trip/{trip_id}", response_class=HTMLResponse)
-def trip_details(
-    trip_id: int,
-    request: Request,
-    db: Session = Depends(get_db)
-):
+def trip_details(request: Request, trip_id: int, db: Session = Depends(get_db)):
 
     trip = db.query(Trip).filter(
         Trip.trip_id == trip_id
@@ -425,6 +536,7 @@ def trip_details(
         )
 
     return templates.TemplateResponse(
+        request,
         "trip_details.html",
         {
             "request": request,
@@ -433,10 +545,6 @@ def trip_details(
     )
 
 
-from sqlalchemy import func, case
-from modules.database import Trip
-
-@app.get("/reports", response_class=HTMLResponse)
 def reports_page(
     request: Request,
     db: Session = Depends(get_db)
@@ -468,15 +576,13 @@ def reports_page(
     )
 
     return templates.TemplateResponse(
+        request,
         "reports.html",
         {
             "request": request,
             "delivery_performance": delivery_performance
         }
     )
-
-from datetime import datetime
-
 @app.get("/trips", response_class=HTMLResponse)
 def trips_page(
     request: Request,
@@ -518,6 +624,7 @@ def trips_page(
             })
 
     return templates.TemplateResponse(
+        request,
         "trips.html",
         {
             "request": request,
@@ -525,11 +632,6 @@ def trips_page(
             "alerts": alerts
         }
     )
-
-from sqlalchemy import func
-from modules.database import Trip
-
-@app.get("/reports", response_class=HTMLResponse)
 def reports_page(
     request: Request,
     db: Session = Depends(get_db)

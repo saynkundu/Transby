@@ -119,7 +119,7 @@
 
                     <h4>Total Vehicles</h4>
 
-                    <h2>53</h2>
+                    <h2>{{ total_vehicles }}</h2>
 
                 </article>
 
@@ -127,7 +127,7 @@
 
                     <h4>Available</h4>
 
-                    <h2>42</h2>
+                    <h2>{{ available_vehicles }}</h2>
 
                 </article>
 
@@ -135,7 +135,7 @@
 
                     <h4>Maintenance</h4>
 
-                    <h2>05</h2>
+                    <h2>{{ maintenance_vehicles }}</h2>
 
                 </article>
 
@@ -143,7 +143,7 @@
 
                     <h4>Active Trips</h4>
 
-                    <h2>18</h2>
+                    <h2>{{ active_trips }}</h2>
 
                 </article>
 
@@ -151,7 +151,7 @@
 
                     <h4>Pending Trips</h4>
 
-                    <h2>09</h2>
+                    <h2>{{ pending_trips }}</h2>
 
                 </article>
 
@@ -159,7 +159,7 @@
 
                     <h4>Drivers On Duty</h4>
 
-                    <h2>26</h2>
+                    <h2>{{ drivers_on_duty }}</h2>
 
                 </article>
 
@@ -199,47 +199,19 @@
 
                         </tr>
 
+                        {% for trip in recent_trips %}
                         <tr>
-
-                            <td>TR001</td>
-
-                            <td>Truck-05</td>
-
-                            <td>Alex</td>
-
-                            <td>On Trip</td>
-
-                            <td>45 mins</td>
-
+                            <td>{{ trip.trip_code or 'N/A' }}</td>
+                            <td>{{ trip.vehicle.registration_number if trip.vehicle else 'N/A' }}</td>
+                            <td>{{ trip.driver.full_name if trip.driver else 'N/A' }}</td>
+                            <td>{{ trip.status }}</td>
+                            <td>{{ trip.completed_at.strftime('%H:%M') if trip.completed_at else '-' }}</td>
                         </tr>
-
+                        {% else %}
                         <tr>
-
-                            <td>TR002</td>
-
-                            <td>Truck-12</td>
-
-                            <td>John</td>
-
-                            <td>Completed</td>
-
-                            <td>-</td>
-
+                            <td colspan="5" style="text-align:center;">No recent trips found</td>
                         </tr>
-
-                        <tr>
-
-                            <td>TR003</td>
-
-                            <td>Mini-08</td>
-
-                            <td>Priya</td>
-
-                            <td>Dispatched</td>
-
-                            <td>1 hr</td>
-
-                        </tr>
+                        {% endfor %}
 
                     </table>
 
@@ -251,17 +223,17 @@
 
                     <h2>Fleet Status</h2>
 
-                    <p>Available : 42</p>
+                    <p>Available : {{ available_vehicles }}</p>
 
-                    <progress value="42" max="53"></progress>
+                    <progress value="{{ available_vehicles }}" max="{{ total_vehicles }}"></progress>
 
-                    <p>On Trip : 18</p>
+                    <p>On Trip : {{ active_trips }}</p>
 
-                    <progress value="18" max="53"></progress>
+                    <progress value="{{ active_trips }}" max="{{ total_vehicles }}"></progress>
 
-                    <p>Maintenance : 05</p>
+                    <p>Maintenance : {{ maintenance_vehicles }}</p>
 
-                    <progress value="5" max="53"></progress>
+                    <progress value="{{ maintenance_vehicles }}" max="{{ total_vehicles }}"></progress>
 
                 </div>
 
@@ -291,11 +263,11 @@
 
                 <ul>
 
-                    <li>Truck-08 requires maintenance.</li>
-
-                    <li>Driver Rahul completed Trip TR018.</li>
-
-                    <li>Fuel expense updated.</li>
+                    {% for note in notifications %}
+                        <li>{{ note }}</li>
+                    {% else %}
+                        <li>No notifications available.</li>
+                    {% endfor %}
 
                 </ul>
 
