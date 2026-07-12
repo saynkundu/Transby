@@ -347,8 +347,8 @@ def vehicles_page(
         request,
         "vehicles.html",
         {
-            "vehicles": vehicles
-        },"vehicles.html"
+          "vehicles": vehicles
+        }
     )
 
 @app.delete("/api/vehicle/{vehicle_id}")
