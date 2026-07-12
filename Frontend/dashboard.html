@@ -693,35 +693,35 @@ progress{
                 <ul>
 
                     <li class="active">
-                        <a href="dashboard.html">Dashboard</a>
+                        <a href="/dashboard">Dashboard</a>
                     </li>
 
                     <li>
-                        <a href="vehicles.html">Vehicle Registry</a>
+                        <a href="/vehicles">Vehicle Registry</a>
                     </li>
 
                     <li>
-                        <a href="drivers.html">Driver Management</a>
+                        <a href="/drivers">Driver Management</a>
                     </li>
 
                     <li>
-                        <a href="trips.html">Trip Management</a>
+                        <a href="/trips">Trip Management</a>
                     </li>
 
                     <li>
-                        <a href="maintenance.html">Maintenance</a>
+                        <a href="/maintenance">Maintenance</a>
                     </li>
 
                     <li>
-                        <a href="fuel-expenses.html">Fuel & Expenses</a>
+                        <a href="/fuel-expenses">Fuel & Expenses</a>
                     </li>
 
                     <li>
-                        <a href="reports.html">Reports</a>
+                        <a href="/reports">Reports</a>
                     </li>
 
                     <li>
-                        <a href="settings.html">Settings</a>
+                        <a href="/settings">Settings</a>
                     </li>
 
                 </ul>
@@ -788,7 +788,7 @@ progress{
 
                     <h4>Total Vehicles</h4>
 
-                    <h2>53</h2>
+                    <h2>{{ total_vehicles }}</h2>
 
                 </article>
 
@@ -796,7 +796,7 @@ progress{
 
                     <h4>Available</h4>
 
-                    <h2>42</h2>
+                    <h2>{{ available_vehicles }}</h2>
 
                 </article>
 
@@ -804,7 +804,7 @@ progress{
 
                     <h4>Maintenance</h4>
 
-                    <h2>05</h2>
+                    <h2>{{ maintenance_vehicles }}</h2>
 
                 </article>
 
@@ -812,7 +812,7 @@ progress{
 
                     <h4>Active Trips</h4>
 
-                    <h2>18</h2>
+                    <h2>{{ active_trips }}</h2>
 
                 </article>
 
@@ -820,7 +820,7 @@ progress{
 
                     <h4>Pending Trips</h4>
 
-                    <h2>09</h2>
+                    <h2>{{ pending_trips }}</h2>
 
                 </article>
 
@@ -828,7 +828,7 @@ progress{
 
                     <h4>Drivers On Duty</h4>
 
-                    <h2>26</h2>
+                    <h2>{{ drivers_on_duty }}</h2>
 
                 </article>
 
@@ -868,47 +868,19 @@ progress{
 
                         </tr>
 
+                        {% for trip in recent_trips %}
                         <tr>
-
-                            <td>TR001</td>
-
-                            <td>Truck-05</td>
-
-                            <td>Alex</td>
-
-                            <td>On Trip</td>
-
-                            <td>45 mins</td>
-
+                            <td>{{ trip.trip_code or 'N/A' }}</td>
+                            <td>{{ trip.vehicle.registration_number if trip.vehicle else 'N/A' }}</td>
+                            <td>{{ trip.driver.full_name if trip.driver else 'N/A' }}</td>
+                            <td>{{ trip.status }}</td>
+                            <td>{{ trip.completed_at.strftime('%H:%M') if trip.completed_at else '-' }}</td>
                         </tr>
-
+                        {% else %}
                         <tr>
-
-                            <td>TR002</td>
-
-                            <td>Truck-12</td>
-
-                            <td>John</td>
-
-                            <td>Completed</td>
-
-                            <td>-</td>
-
+                            <td colspan="5" style="text-align:center;">No recent trips found</td>
                         </tr>
-
-                        <tr>
-
-                            <td>TR003</td>
-
-                            <td>Mini-08</td>
-
-                            <td>Priya</td>
-
-                            <td>Dispatched</td>
-
-                            <td>1 hr</td>
-
-                        </tr>
+                        {% endfor %}
 
                     </table>
 
@@ -920,17 +892,17 @@ progress{
 
                     <h2>Fleet Status</h2>
 
-                    <p>Available : 42</p>
+                    <p>Available : {{ available_vehicles }}</p>
 
-                    <progress value="42" max="53"></progress>
+                    <progress value="{{ available_vehicles }}" max="{{ total_vehicles }}"></progress>
 
-                    <p>On Trip : 18</p>
+                    <p>On Trip : {{ active_trips }}</p>
 
-                    <progress value="18" max="53"></progress>
+                    <progress value="{{ active_trips }}" max="{{ total_vehicles }}"></progress>
 
-                    <p>Maintenance : 05</p>
+                    <p>Maintenance : {{ maintenance_vehicles }}</p>
 
-                    <progress value="5" max="53"></progress>
+                    <progress value="{{ maintenance_vehicles }}" max="{{ total_vehicles }}"></progress>
 
                 </div>
 
@@ -960,11 +932,11 @@ progress{
 
                 <ul>
 
-                    <li>Truck-08 requires maintenance.</li>
-
-                    <li>Driver Rahul completed Trip TR018.</li>
-
-                    <li>Fuel expense updated.</li>
+                    {% for note in notifications %}
+                        <li>{{ note }}</li>
+                    {% else %}
+                        <li>No notifications available.</li>
+                    {% endfor %}
 
                 </ul>
 

@@ -60,6 +60,22 @@ class User(Base):
     role = relationship("Role", back_populates="users")
 
 
+class PasswordResetRequest(Base):
+
+    __tablename__ = "password_reset_requests"
+
+    reset_id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False, index=True)
+    otp_hash = Column(String(64), nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    attempts = Column(Integer, nullable=False, default=0)
+    verified_at = Column(DateTime, nullable=True)
+    reset_token_hash = Column(String(64), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    user = relationship("User")
+
+
 # =====================================================
 # VEHICLES
 # =====================================================
@@ -320,3 +336,39 @@ class VehicleDocument(Base):
     uploaded_at = Column(DateTime, default=datetime.utcnow)
 
     vehicle = relationship("Vehicle", back_populates="documents")
+
+class Mechanic(Base):
+
+    __tablename__ = "mechanics"
+
+    mechanic_id = Column(Integer, primary_key=True, index=True)
+
+    full_name = Column(String(100), nullable=False)
+
+    specialization = Column(String(100))
+
+    contact_number = Column(String(20))
+
+    status = Column(
+        Enum(
+            "Available",
+            "Busy",
+            "On Leave",
+            name="mechanic_status"
+        ),
+        default="Available"
+    )
+
+maintenance_logs = relationship(
+        "MaintenanceLog",
+        back_populates="mechanic"
+    )
+
+mechanic_id = Column(
+    Integer,
+    ForeignKey("mechanics.mechanic_id")
+)
+mechanic = relationship(
+    "Mechanic",
+    back_populates="maintenance_logs"
+)

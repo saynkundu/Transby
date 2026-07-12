@@ -19,21 +19,21 @@
 
         <ul>
 
-            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
 
-            <li><a href="vehicles.html">Vehicle Registry</a></li>
+            <li><a href="/vehicles">Vehicle Registry</a></li>
 
-            <li><a href="drivers.html">Driver Management</a></li>
+            <li><a href="/drivers">Driver Management</a></li>
 
-            <li><a href="trips.html">Trip Management</a></li>
+            <li><a href="/trips">Trip Management</a></li>
 
-            <li><a href="maintenance.html">Maintenance</a></li>
+            <li><a href="/maintenance">Maintenance</a></li>
 
-            <li><a href="fuel-expenses.html">Fuel & Expenses</a></li>
+            <li><a href="/fuel-expenses">Fuel & Expenses</a></li>
 
-            <li><a href="reports.html">Reports & Analytics</a></li>
+            <li><a href="/reports">Reports & Analytics</a></li>
 
-            <li><a href="settings.html">Settings</a></li>
+            <li><a href="/settings">Settings</a></li>
 
         </ul>
 
@@ -59,13 +59,13 @@
 
             <h2>Profile Information</h2>
 
-            <img src="assets/avatars/admin.png" alt="Profile" width="100">
+            <img src="{{ profile.avatar_url|default('assets/avatars/admin.png') }}" alt="Profile" width="100">
 
-            <p><strong>Name:</strong> Fleet Administrator</p>
+            <p><strong>Name:</strong> {{ profile.name if profile else 'Fleet Administrator' }}</p>
 
-            <p><strong>Email:</strong> admin@transitops.com</p>
+            <p><strong>Email:</strong> {{ profile.email if profile else 'admin@transitops.com' }}</p>
 
-            <p><strong>Role:</strong> Administrator</p>
+            <p><strong>Role:</strong> {{ profile.role if profile else 'Administrator' }}</p>
 
             <button>Edit Profile</button>
 
@@ -100,19 +100,18 @@
                     <th>Action</th>
                 </tr>
 
+                {% for user in users %}
                 <tr>
-                    <td>Rahul Sharma</td>
-                    <td>Driver</td>
-                    <td>Active</td>
+                    <td>{{ user.full_name }}</td>
+                    <td>{{ user.role.role_name if user.role else 'User' }}</td>
+                    <td>{{ 'Active' if user.is_active|default(true) else 'Inactive' }}</td>
                     <td><button>Edit Role</button></td>
                 </tr>
-
+                {% else %}
                 <tr>
-                    <td>Priya Roy</td>
-                    <td>Dispatcher</td>
-                    <td>Active</td>
-                    <td><button>Edit Role</button></td>
+                    <td colspan="4" style="text-align:center;">No users found.</td>
                 </tr>
+                {% endfor %}
 
             </table>
 
@@ -131,6 +130,15 @@
             <label><input type="checkbox"> Trip Alerts</label><br><br>
 
             <label><input type="checkbox"> Fuel Alerts</label>
+
+            <h3>Recent Notifications</h3>
+            <ul>
+                {% for note in notifications %}
+                    <li>{{ note }}</li>
+                {% else %}
+                    <li>No notifications available.</li>
+                {% endfor %}
+            </ul>
 
         </section>
 
@@ -202,13 +210,13 @@
 
             <h2>System Status</h2>
 
-            <p>🟢 Server Running</p>
+            <p>Server : {{ system_status.server if system_status and system_status.server else 'Unknown' }}</p>
 
-            <p>🟢 Database Connected</p>
+            <p>Database : {{ system_status.database if system_status and system_status.database else 'Unknown' }}</p>
 
-            <p>🟢 GPS Service Online</p>
+            <p>GPS : {{ system_status.gps if system_status and system_status.gps else 'Unknown' }}</p>
 
-            <p>Version : 1.0.0</p>
+            <p>Version : {{ system_status.version if system_status and system_status.version else 'N/A' }}</p>
 
         </section>
 
@@ -219,15 +227,11 @@
             <h2>Recent Activity</h2>
 
             <ul>
-
-                <li>Admin updated Driver Role</li>
-
-                <li>Fuel Report Exported</li>
-
-                <li>Maintenance Schedule Updated</li>
-
-                <li>New Vehicle Added</li>
-
+                {% for note in notifications %}
+                    <li>{{ note }}</li>
+                {% else %}
+                    <li>No recent activity.</li>
+                {% endfor %}
             </ul>
 
         </section>

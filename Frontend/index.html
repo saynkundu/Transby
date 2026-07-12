@@ -204,18 +204,10 @@
                 });
 
                 const result = await response.json();
-
-                if (!response.ok)
-                    throw new Error(result.detail || 'Unable to sign in.');
-
+                if (!response.ok) throw new Error(result.detail || 'Unable to sign in.');
                 alert(result.message);
-
-                window.location.href = 'dashboard.html';
-
-            }
-
-            catch (error) {
-
+                window.location.href = '/dashboard';
+            } catch (error) {
                 alert(error.message);
 
             }

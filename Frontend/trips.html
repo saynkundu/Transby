@@ -24,21 +24,21 @@
 
         <ul>
 
-            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
 
-            <li><a href="vehicles.html">Vehicle Registry</a></li>
+            <li><a href="/vehicles">Vehicle Registry</a></li>
 
-            <li><a href="drivers.html">Driver Management</a></li>
+            <li><a href="/drivers">Driver Management</a></li>
 
-            <li><a href="trips.html">Trip Management</a></li>
+            <li><a href="/trips">Trip Management</a></li>
 
-            <li><a href="maintenance.html">Maintenance</a></li>
+            <li><a href="/maintenance">Maintenance</a></li>
 
-            <li><a href="fuel-expenses.html">Fuel & Expenses</a></li>
+            <li><a href="/fuel-expenses">Fuel & Expenses</a></li>
 
-            <li><a href="reports.html">Reports</a></li>
+            <li><a href="/reports">Reports</a></li>
 
-            <li><a href="settings.html">Settings</a></li>
+            <li><a href="/settings">Settings</a></li>
 
         </ul>
 
@@ -152,88 +152,120 @@
 
         <!-- Trip Table -->
 
-        <section>
+       <section>
 
-            <h2>Trip Records</h2>
+<h2>Trip Records</h2>
 
-            <table border="1">
+<table border="1">
 
-                <tr>
+<thead>
 
-                    <th>Trip ID</th>
+<tr>
 
-                    <th>Vehicle</th>
+<th>Trip ID</th>
+<th>Vehicle</th>
+<th>Driver</th>
+<th>Source</th>
+<th>Destination</th>
+<th>Departure</th>
+<th>Status</th>
+<th>Action</th>
 
-                    <th>Driver</th>
+</tr>
 
-                    <th>Source</th>
+</thead>
 
-                    <th>Destination</th>
+<tbody>
 
-                    <th>Departure</th>
+{% for trip in trips %}
 
-                    <th>Status</th>
+<tr>
 
-                    <th>Action</th>
+<td>{{ trip.trip_code }}</td>
 
-                </tr>
+<td>
+    {% if trip.vehicle %}
+        {{ trip.vehicle.registration_number }}
+    {% else %}
+        N/A
+    {% endif %}
+</td>
 
-                <tr>
+<td>
+    {% if trip.driver %}
+        {{ trip.driver.full_name }}
+    {% else %}
+        N/A
+    {% endif %}
+</td>
 
-                    <td>TR001</td>
+<td>{{ trip.source_location }}</td>
 
-                    <td>TRK-101</td>
+<td>{{ trip.destination_location }}</td>
 
-                    <td>Rahul Sharma</td>
+<td>{{ trip.created_at.strftime("%d-%m-%Y %I:%M %p") }}</td>
 
-                    <td>Kolkata</td>
+<td>
 
-                    <td>Durgapur</td>
+{% if trip.status == "Completed" %}
 
-                    <td>10:30 AM</td>
+<span style="color:green;">
+    {{ trip.status }}
+</span>
 
-                    <td>In Transit</td>
+{% elif trip.status == "Dispatched" %}
 
-                    <td>
+<span style="color:orange;">
+    {{ trip.status }}
+</span>
 
-                        <button>View</button>
+{% elif trip.status == "Cancelled" %}
 
-                        <button>Edit</button>
+<span style="color:red;">
+    {{ trip.status }}
+</span>
 
-                    </td>
+{% else %}
 
-                </tr>
+<span style="color:blue;">
+    {{ trip.status }}
+</span>
 
-                <tr>
+{% endif %}
 
-                    <td>TR002</td>
+</td>
 
-                    <td>TRK-205</td>
+<td>
 
-                    <td>Amit Roy</td>
+<a href="/trip/{{ trip.trip_id }}">
+<button>View</button>
+</a>
 
-                    <td>Howrah</td>
+<a href="/trip/edit/{{ trip.trip_id }}">
+<button>Edit</button>
+</a>
 
-                    <td>Siliguri</td>
+</td>
 
-                    <td>08:15 AM</td>
+</tr>
 
-                    <td>Completed</td>
+{% else %}
 
-                    <td>
+<tr>
 
-                        <button>View</button>
+<td colspan="8" style="text-align:center;">
+No Trips Available
+</td>
 
-                        <button>Edit</button>
+</tr>
 
-                    </td>
+{% endfor %}
 
-                </tr>
+</tbody>
 
-            </table>
+</table>
 
-        </section>
-
+</section>
         <!-- Live Trip Tracking -->
 
         <section>
@@ -246,137 +278,210 @@
 
         </section>
 
-        <!-- Trip Timeline -->
-
-        <section>
-
-            <h2>Trip Timeline</h2>
-
-            <ul>
-
-                <li>Trip Created</li>
-
-                <li>Driver Assigned</li>
-
-                <li>Vehicle Dispatched</li>
-
-                <li>In Transit</li>
-
-                <li>Delivered</li>
-
-            </ul>
-
-        </section>
-
         <!-- Driver & Vehicle Assignment -->
 
         <section>
 
-            <h2>Assignments</h2>
+    <h2>Assignments</h2>
 
-            <table border="1">
+    <table border="1">
 
-                <tr>
+        <thead>
 
-                    <th>Trip</th>
+            <tr>
 
-                    <th>Driver</th>
+                <th>Trip</th>
+                <th>Driver</th>
+                <th>Vehicle</th>
+                <th>Status</th>
 
-                    <th>Vehicle</th>
+            </tr>
 
-                    <th>Status</th>
+        </thead>
 
-                </tr>
+        <tbody>
 
-                <tr>
+            {% for trip in trips %}
 
-                    <td>TR001</td>
+            <tr>
 
-                    <td>Rahul Sharma</td>
+                <td>{{ trip.trip_code }}</td>
 
-                    <td>TRK-101</td>
+                <td>
+                    {% if trip.driver %}
+                        {{ trip.driver.full_name }}
+                    {% else %}
+                        Not Assigned
+                    {% endif %}
+                </td>
 
-                    <td>Assigned</td>
+                <td>
+                    {% if trip.vehicle %}
+                        {{ trip.vehicle.registration_number }}
+                    {% else %}
+                        Not Assigned
+                    {% endif %}
+                </td>
 
-                </tr>
+                <td>
 
-            </table>
+                    {% if trip.status == "Draft" %}
+                        <span style="color:gray;">Draft</span>
 
-        </section>
+                    {% elif trip.status == "Dispatched" %}
+                        <span style="color:orange;">Assigned</span>
 
+                    {% elif trip.status == "Completed" %}
+                        <span style="color:green;">Completed</span>
+
+                    {% elif trip.status == "Cancelled" %}
+                        <span style="color:red;">Cancelled</span>
+
+                    {% else %}
+                        {{ trip.status }}
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% else %}
+
+            <tr>
+
+                <td colspan="4" style="text-align:center;">
+                    No Assignments Found
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</section>
         <!-- Delivery Performance -->
 
         <section>
 
-            <h2>Delivery Performance</h2>
+    <h2>Delivery Performance</h2>
 
-            <table border="1">
+    <table border="1">
 
-                <tr>
+        <thead>
 
-                    <th>Route</th>
+        <tr>
 
-                    <th>Trips</th>
+            <th>Route</th>
+            <th>Trips</th>
+            <th>On Time</th>
+            <th>Delayed</th>
 
-                    <th>On Time</th>
+        </tr>
 
-                    <th>Delayed</th>
+        </thead>
 
-                </tr>
+        <tbody>
 
-                <tr>
+        {% for route in delivery_performance %}
 
-                    <td>Kolkata → Durgapur</td>
+        <tr>
 
-                    <td>84</td>
+            <td>
+                {{ route.source_location }}
+                →
+                {{ route.destination_location }}
+            </td>
 
-                    <td>79</td>
+            <td>{{ route.total_trips }}</td>
 
-                    <td>5</td>
+            <td style="color:green;">
+                {{ route.on_time }}
+            </td>
 
-                </tr>
+            <td style="color:red;">
+                {{ route.delayed }}
+            </td>
 
-            </table>
+        </tr>
 
-        </section>
+        {% else %}
 
+        <tr>
+
+            <td colspan="4" style="text-align:center;">
+                No Delivery Records Available
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</section>
         <!-- Alerts -->
 
         <section>
 
-            <h2>Trip Alerts</h2>
+    <h2>Trip Alerts</h2>
 
-            <ul>
+    <ul>
 
-                <li>⚠ Trip TR014 delayed by 35 minutes.</li>
+    {% for alert in alerts %}
 
-                <li>⚠ Driver exceeded driving limit.</li>
+        <li>
 
-                <li>⚠ Vehicle TRK-220 stopped unexpectedly.</li>
+            {% if alert.type == "danger" %}
 
-            </ul>
+                🔴 {{ alert.message }}
 
-        </section>
+            {% elif alert.type == "warning" %}
 
+                🟡 {{ alert.message }}
+
+            {% else %}
+
+                🟢 {{ alert.message }}
+
+            {% endif %}
+
+        </li>
+
+    {% else %}
+
+        <li>✅ No Active Alerts</li>
+
+    {% endfor %}
+
+    </ul>
+
+</section>
         <!-- Analytics -->
 
         <section>
 
-            <h2>Trip Analytics</h2>
+    <h2>Trip Analytics</h2>
 
-            <div>
+    <div style="width:600px">
 
-                <p>Trip Completion Chart</p>
+        <canvas id="tripChart"></canvas>
 
-            </div>
+    </div>
 
-            <div>
+    <br>
 
-                <p>Route Performance Chart</p>
+    <div style="width:800px">
 
-            </div>
+        <canvas id="routeChart"></canvas>
 
-        </section>
+    </div>
+
+</section>
 
         <!-- Quick Actions -->
 

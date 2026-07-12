@@ -43,35 +43,35 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         <ul>
 
             <li>
-                <a href="dashboard.html">Dashboard</a>
+                <a href="/dashboard">Dashboard</a>
             </li>
 
             <li class="active">
-                <a href="vehicles.html">Vehicle Registry</a>
+                <a href="/vehicles">Vehicle Registry</a>
             </li>
 
             <li>
-                <a href="drivers.html">Driver Management</a>
+                <a href="/drivers">Driver Management</a>
             </li>
 
             <li>
-                <a href="trips.html">Trip Management</a>
+                <a href="/trips">Trip Management</a>
             </li>
 
             <li>
-                <a href="maintenance.html">Maintenance</a>
+                <a href="/maintenance">Maintenance</a>
             </li>
 
             <li>
-                <a href="fuel-expenses.html">Fuel & Expenses</a>
+                <a href="/fuel-expenses">Fuel & Expenses</a>
             </li>
 
             <li>
-                <a href="reports.html">Reports</a>
+                <a href="/reports">Reports</a>
             </li>
 
             <li>
-                <a href="settings.html">Settings</a>
+                <a href="/settings">Settings</a>
             </li>
 
         </ul>
@@ -177,7 +177,7 @@ placeholder="Search Vehicle...">
 
 </select>
 
-<button>
+<button type="button" id="open-vehicle-modal">
 
 <i class="fa-solid fa-plus"></i>
 
@@ -197,10 +197,10 @@ Add Vehicle
             <th>Vehicle</th>
             <th>Type</th>
             <th>Capacity</th>
+            <th>Odometer</th>
+             <th>Region</th>
             <th>Status</th>
-            <th>Health</th>
-            <th>Documents</th>
-            <th>Actions</th>
+           
 
         </tr>
 
@@ -208,43 +208,30 @@ Add Vehicle
 
     <tbody>
 
-        <tr>
+{% for vehicle in vehicles %}
 
-            <td>WB20AB1234</td>
-            <td>Tata Ace</td>
-            <td>Mini Truck</td>
-            <td>750 Kg</td>
-            <td>Available</td>
-            <td>Excellent</td>
-            <td>
-                <button>View</button>
-            </td>
-            <td>
-                <button>Edit</button>
-                <button>Delete</button>
-            </td>
+<tr>
 
-        </tr>
+    <td>{{ vehicle.registration_number }}</td>
 
-        <tr>
+    <td>{{ vehicle.vehicle_name }}</td>
 
-            <td>WB10XY5678</td>
-            <td>Ashok Leyland</td>
-            <td>Truck</td>
-            <td>5000 Kg</td>
-            <td>On Trip</td>
-            <td>Good</td>
-            <td>
-                <button>View</button>
-            </td>
-            <td>
-                <button>Edit</button>
-                <button>Delete</button>
-            </td>
+    <td>{{ vehicle.vehicle_type }}</td>
 
-        </tr>
+    <td>{{ vehicle.max_load_capacity }} Kg</td>
 
-    </tbody>
+    <td>{{ vehicle.odometer }} km</td>
+
+    <td>{{ vehicle.region }}</td>
+
+    <td>{{ vehicle.status }}</td>
+
+
+</tr>
+
+{% endfor %}
+
+</tbody>
 
 </table>
 </section>
@@ -252,17 +239,19 @@ Add Vehicle
 
 <h2>Add Vehicle</h2>
 
-<form>
+<form id="vehicle-form">
 
 <input
 type="text"
+id="registration-number"
 placeholder="Registration Number">
 
 <input
 type="text"
+id="vehicle-name"
 placeholder="Vehicle Model">
 
-<select>
+<select id="vehicle-type">
 
 <option>Truck</option>
 
@@ -274,28 +263,34 @@ placeholder="Vehicle Model">
 
 <input
 type="number"
+id="max-load-capacity"
 placeholder="Maximum Capacity">
 
 <input
 type="number"
+id="odometer"
 placeholder="Odometer">
 
 <input
 type="number"
+id="acquisition-cost"
 placeholder="Acquisition Cost">
 
-<select>
+<input
+type="text"
+id="region"
+placeholder="Region">
+
+<select id="vehicle-status">
 
 <option>Available</option>
-
+<option>On Trip</option>
+<option>In Shop</option>
 <option>Retired</option>
 
 </select>
 
-<input
-type="file">
-
-<button>
+<button type="submit" id="save-vehicle-btn">
 
 Save Vehicle
 
@@ -307,6 +302,63 @@ Save Vehicle
 </main>
 
 </div>
+
+<script>
+    const vehicleForm = document.getElementById('vehicle-form');
+
+    document.getElementById('open-vehicle-modal').addEventListener('click', () => {
+        document.getElementById('vehicle-modal').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('registration-number').focus();
+    });
+
+    vehicleForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const button = document.getElementById('save-vehicle-btn');
+        const payload = {
+            registration_number: document.getElementById('registration-number').value.trim(),
+            vehicle_name: document.getElementById('vehicle-name').value.trim(),
+            vehicle_type: document.getElementById('vehicle-type').value,
+            max_load_capacity: Number(document.getElementById('max-load-capacity').value),
+            odometer: Number(document.getElementById('odometer').value),
+            acquisition_cost: Number(document.getElementById('acquisition-cost').value),
+            region: document.getElementById('region').value.trim()
+        };
+
+        if (!payload.registration_number || !payload.vehicle_name || !payload.region ||
+            Number.isNaN(payload.max_load_capacity) || Number.isNaN(payload.odometer) ||
+            Number.isNaN(payload.acquisition_cost)) {
+            alert('Please complete all vehicle fields.');
+            return;
+        }
+
+        button.disabled = true;
+        try {
+            const response = await fetch('/api/add_vehicle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                const message = Array.isArray(result.detail)
+                    ? result.detail.map(item => item.msg).join(', ')
+                    : result.detail;
+                throw new Error(message || 'Unable to add vehicle.');
+            }
+
+            const vehicle = result.vehicle;
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${vehicle.registration_number}</td><td>${vehicle.vehicle_name}</td><td>${vehicle.vehicle_type}</td><td>${payload.max_load_capacity} Kg</td><td>${vehicle.status}</td><td>New</td><td><button type="button">View</button></td><td><button type="button">Edit</button> <button type="button">Delete</button></td>`;
+            document.querySelector('.vehicle-table tbody').prepend(row);
+            vehicleForm.reset();
+            alert(result.message);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            button.disabled = false;
+        }
+    });
+</script>
 
 </body>
 

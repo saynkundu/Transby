@@ -19,21 +19,21 @@
 
             <ul>
 
-                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
 
-                <li><a href="vehicles.html">Vehicle Registry</a></li>
+                <li><a href="/vehicles">Vehicle Registry</a></li>
 
-                <li><a href="drivers.html">Driver Management</a></li>
+                <li><a href="/drivers">Driver Management</a></li>
 
-                <li><a href="trips.html">Trip Management</a></li>
+                <li><a href="/trips">Trip Management</a></li>
 
-                <li><a href="maintenance.html">Maintenance</a></li>
+                <li><a href="/maintenance">Maintenance</a></li>
 
-                <li><a href="fuel-expenses.html">Fuel & Expenses</a></li>
+                <li><a href="/fuel-expenses">Fuel & Expenses</a></li>
 
-                <li><a href="reports.html">Reports</a></li>
+                <li><a href="/reports">Reports</a></li>
 
-                <li><a href="settings.html">Settings</a></li>
+                <li><a href="/settings">Settings</a></li>
 
             </ul>
 
@@ -109,7 +109,7 @@
 
                     <h4>Total Fuel Cost</h4>
 
-                    <h2>₹85,000</h2>
+                    <h2>₹{{ "{:,}".format(total_fuel_cost) }}</h2>
 
                 </article>
 
@@ -117,7 +117,7 @@
 
                     <h4>Total Expenses</h4>
 
-                    <h2>₹1,32,000</h2>
+                    <h2>₹{{ "{:,}".format(total_expenses) }}</h2>
 
                 </article>
 
@@ -125,7 +125,7 @@
 
                     <h4>Fuel Entries</h4>
 
-                    <h2>215</h2>
+                    <h2>{{ fuel_entries }}</h2>
 
                 </article>
 
@@ -133,7 +133,7 @@
 
                     <h4>Average Mileage</h4>
 
-                    <h2>15.6 km/L</h2>
+                    <h2>{{ avg_mileage }} km/L</h2>
 
                 </article>
 
@@ -167,33 +167,26 @@
 
                     </tr>
 
+                    {% for fuel in fuel_records %}
                     <tr>
-
-                        <td>12-07-2026</td>
-
-                        <td>TRK-101</td>
-
-                        <td>Rahul</td>
-
-                        <td>Diesel</td>
-
-                        <td>80 L</td>
-
-                        <td>₹7,200</td>
-
-                        <td>16 km/L</td>
-
+                        <td>{{ fuel.fuel_date.strftime('%d-%m-%Y') if fuel.fuel_date else '-' }}</td>
+                        <td>{{ fuel.vehicle.registration_number if fuel.vehicle else 'N/A' }}</td>
+                        <td>{{ fuel.driver.full_name if fuel.driver else 'N/A' }}</td>
+                        <td>{{ fuel.fuel_type or '-' }}</td>
+                        <td>{{ fuel.liters }} L</td>
+                        <td>₹{{ "{:,}".format(fuel.fuel_cost) }}</td>
+                        <td>{{ fuel.mileage if fuel.mileage is defined and fuel.mileage else '-' }}</td>
                         <td>
-
                             <button>View</button>
-
                             <button>Edit</button>
-
                             <button>Delete</button>
-
                         </td>
-
                     </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" style="text-align:center;">No fuel records found.</td>
+                    </tr>
+                    {% endfor %}
 
                 </table>
 
@@ -223,29 +216,24 @@
 
                     </tr>
 
+                    {% for expense in expense_records %}
                     <tr>
-
-                        <td>11-07-2026</td>
-
-                        <td>TRK-205</td>
-
-                        <td>Tyre Replacement</td>
-
-                        <td>₹18,500</td>
-
-                        <td>Approved</td>
-
+                        <td>{{ expense.expense_date.strftime('%d-%m-%Y') if expense.expense_date else '-' }}</td>
+                        <td>{{ expense.vehicle.registration_number if expense.vehicle else 'N/A' }}</td>
+                        <td>{{ expense.description or expense.expense_type or '-' }}</td>
+                        <td>₹{{ "{:,}".format(expense.amount) }}</td>
+                        <td>{{ expense.status or 'Pending' }}</td>
                         <td>
-
                             <button>View</button>
-
                             <button>Edit</button>
-
                             <button>Delete</button>
-
                         </td>
-
                     </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align:center;">No expense records found.</td>
+                    </tr>
+                    {% endfor %}
 
                 </table>
 
@@ -258,19 +246,11 @@
                 <h2>Expense Categories</h2>
 
                 <ul>
-
-                    <li>Fuel</li>
-
-                    <li>Repair</li>
-
-                    <li>Insurance</li>
-
-                    <li>Toll Tax</li>
-
-                    <li>Parking</li>
-
-                    <li>Cleaning</li>
-
+                    {% for cat, count in expense_categories %}
+                        <li>{{ cat }} ({{ count }})</li>
+                    {% else %}
+                        <li>No expense categories available.</li>
+                    {% endfor %}
                 </ul>
 
             </section>
@@ -281,17 +261,13 @@
 
                 <h2>Fuel Analytics</h2>
 
-                <div>
-
-                    <p>Monthly Fuel Consumption Chart</p>
-
-                </div>
-
-                <div>
-
-                    <p>Expense Distribution Chart</p>
-
-                </div>
+                <ul>
+                    {% for cat, count in expense_categories %}
+                        <li>{{ cat }} ({{ count }})</li>
+                    {% else %}
+                        <li>No expense categories available.</li>
+                    {% endfor %}
+                </ul>
 
             </section>
 

@@ -11,7 +11,7 @@ from pydantic import BaseModel, EmailStr
 class Login(BaseModel):
     email: EmailStr
     password: str
-    role: str
+    role: Optional[str] = None
 
 
 class Register(BaseModel):
@@ -21,6 +21,21 @@ class Register(BaseModel):
     password: str
     confirm_password: str
     role: str
+
+
+class ForgotPassword(BaseModel):
+    email: EmailStr
+
+
+class VerifyPasswordOtp(BaseModel):
+    email: EmailStr
+    otp: str
+
+
+class ResetPassword(BaseModel):
+    reset_token: str
+    password: str
+    confirm_password: str
 
 
 # =====================================================
