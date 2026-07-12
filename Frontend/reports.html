@@ -466,11 +466,42 @@ main section h2{
 /* Charts */
 
 
+main section.charts-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:18px;
+
+}
+
+
+main section.charts-grid div{
+
+    min-height:220px;
+
+}
+
+
+main section.charts-grid canvas{
+
+    width:100%;
+
+    height:160px;
+
+    max-height:160px;
+
+    display:block;
+
+}
+
+
 main section div{
 
     background:var(--card);
 
-    padding:25px;
+    padding:18px;
 
     margin-bottom:15px;
 
@@ -818,7 +849,7 @@ section li{
 
                 <h4>Total Trips</h4>
 
-                <h2>1,280</h2>
+                <h2>{{ total_trips }}</h2>
 
             </article>
 
@@ -826,7 +857,7 @@ section li{
 
                 <h4>Total Revenue</h4>
 
-                <h2>₹12.5L</h2>
+                <h2>₹{{ "%.2f" | format(total_revenue) }}</h2>
 
             </article>
 
@@ -834,7 +865,7 @@ section li{
 
                 <h4>Fuel Cost</h4>
 
-                <h2>₹3.1L</h2>
+                <h2>₹{{ "%.2f" | format(total_fuel_cost) }}</h2>
 
             </article>
 
@@ -842,7 +873,7 @@ section li{
 
                 <h4>Maintenance Cost</h4>
 
-                <h2>₹1.2L</h2>
+                <h2>₹{{ "%.2f" | format(maintenance_cost) }}</h2>
 
             </article>
 
@@ -850,7 +881,7 @@ section li{
 
                 <h4>Fleet Utilization</h4>
 
-                <h2>89%</h2>
+                <h2>{{ "%.1f" | format(fleet_utilization) }}%</h2>
 
             </article>
 
@@ -858,7 +889,7 @@ section li{
 
         <!-- Charts -->
 
-        <section>
+        <section class="charts-grid">
 
             <h2>Analytics Dashboard</h2>
 
@@ -866,7 +897,7 @@ section li{
 
                 <h3>Monthly Trip Chart</h3>
 
-                <p>Chart Placeholder</p>
+                <canvas id="monthlyTripChart"></canvas>
 
             </div>
 
@@ -874,7 +905,7 @@ section li{
 
                 <h3>Revenue Chart</h3>
 
-                <p>Chart Placeholder</p>
+                <canvas id="monthlyRevenueChart"></canvas>
 
             </div>
 
@@ -882,7 +913,7 @@ section li{
 
                 <h3>Fuel Consumption</h3>
 
-                <p>Chart Placeholder</p>
+                <canvas id="monthlyFuelChart"></canvas>
 
             </div>
 
@@ -890,7 +921,7 @@ section li{
 
                 <h3>Expense Distribution</h3>
 
-                <p>Pie Chart Placeholder</p>
+                <canvas id="expensePieChart"></canvas>
 
             </div>
 
@@ -1154,6 +1185,169 @@ section li{
 
 </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const tripLabels = {{ monthly_trip_labels | tojson }};
+        const tripValues = {{ monthly_trip_values | tojson }};
+        const revenueLabels = {{ monthly_revenue_labels | tojson }};
+        const revenueValues = {{ monthly_revenue_values | tojson }};
+        const fuelLabels = {{ monthly_fuel_labels | tojson }};
+        const fuelValues = {{ monthly_fuel_values | tojson }};
+        const expenseLabels = {{ expense_labels | tojson }};
+        const expenseValues = {{ expense_values | tojson }};
+
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    enabled: true
+                }
+            }
+        };
+
+        const monthlyTripChart = new Chart(
+            document.getElementById('monthlyTripChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: tripLabels,
+                    datasets: [
+                        {
+                            label: 'Trips',
+                            data: tripValues,
+                            borderColor: '#0d9488',
+                            backgroundColor: 'rgba(13,148,136,0.2)',
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#0d9488'
+                        }
+                    ]
+                },
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Trips'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        const monthlyRevenueChart = new Chart(
+            document.getElementById('monthlyRevenueChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: revenueLabels,
+                    datasets: [
+                        {
+                            label: 'Revenue',
+                            data: revenueValues,
+                            backgroundColor: '#38bdf8',
+                            borderColor: '#0ea5e9',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Revenue (₹)'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        const monthlyFuelChart = new Chart(
+            document.getElementById('monthlyFuelChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: fuelLabels,
+                    datasets: [
+                        {
+                            label: 'Fuel (Liters)',
+                            data: fuelValues,
+                            backgroundColor: '#f97316',
+                            borderColor: '#ea580c',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Liters'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        new Chart(
+            document.getElementById('expensePieChart'),
+            {
+                type: 'pie',
+                data: {
+                    labels: expenseLabels,
+                    datasets: [
+                        {
+                            label: 'Expense Distribution',
+                            data: expenseValues,
+                            backgroundColor: [
+                                '#0ea5e9',
+                                '#34d399',
+                                '#f97316',
+                                '#ef4444',
+                                '#a855f7'
+                            ]
+                        }
+                    ]
+                },
+                options: commonOptions
+            }
+        );
+    </script>
 </body>
 
 </html>

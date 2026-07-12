@@ -545,45 +545,6 @@ def trip_details(request: Request, trip_id: int, db: Session = Depends(get_db)):
         }
     )
 
-
-def reports_page(
-    request: Request,
-    db: Session = Depends(get_db)
-):
-
-    delivery_performance = (
-        db.query(
-            Trip.source_location,
-            Trip.destination_location,
-            func.count(Trip.trip_id).label("total_trips"),
-            func.sum(
-                case(
-                    (Trip.status == "Completed", 1),
-                    else_=0
-                )
-            ).label("on_time"),
-            func.sum(
-                case(
-                    (Trip.status == "Cancelled", 1),
-                    else_=0
-                )
-            ).label("delayed")
-        )
-        .group_by(
-            Trip.source_location,
-            Trip.destination_location
-        )
-        .all()
-    )
-
-    return templates.TemplateResponse(
-        request,
-        "reports.html",
-        {
-            "request": request,
-            "delivery_performance": delivery_performance
-        }
-    )
 @app.get("/trips", response_class=HTMLResponse)
 def trips_page(
     request: Request,
@@ -633,67 +594,81 @@ def trips_page(
             "alerts": alerts
         }
     )
+@app.get("/reports", response_class=HTMLResponse)
 def reports_page(
     request: Request,
     db: Session = Depends(get_db)
 ):
 
-    trips = db.query(Trip).all()
+    total_trips = db.query(func.count(Trip.trip_id)).scalar() or 0
+    total_revenue = db.query(func.coalesce(func.sum(Trip.revenue), 0.0)).scalar() or 0.0
+    total_fuel_cost = db.query(func.coalesce(func.sum(FuelLog.fuel_cost), 0.0)).scalar() or 0.0
+    maintenance_cost = db.query(func.coalesce(func.sum(Expense.amount), 0.0)).filter(
+        Expense.expense_type == "Maintenance"
+    ).scalar() or 0.0
 
-    # -------- Trip Completion --------
-    completed = db.query(Trip).filter(
-        Trip.status == "Completed"
-    ).count()
+    total_vehicles = db.query(func.count(Vehicle.vehicle_id)).scalar() or 0
+    on_trip_vehicles = db.query(func.count(Vehicle.vehicle_id)).filter(
+        Vehicle.status == "On Trip"
+    ).scalar() or 0
+    fleet_utilization = round((on_trip_vehicles / total_vehicles) * 100, 1) if total_vehicles else 0
 
-    dispatched = db.query(Trip).filter(
-        Trip.status == "Dispatched"
-    ).count()
-
-    cancelled = db.query(Trip).filter(
-        Trip.status == "Cancelled"
-    ).count()
-
-    draft = db.query(Trip).filter(
-        Trip.status == "Draft"
-    ).count()
-
-    trip_chart = {
-        "labels": ["Completed", "Dispatched", "Draft", "Cancelled"],
-        "values": [completed, dispatched, draft, cancelled]
-    }
-
-    # -------- Route Performance --------
-
-    routes = (
+    monthly_trip_rows = (
         db.query(
-            Trip.source_location,
-            Trip.destination_location,
-            func.count(Trip.trip_id)
+            func.strftime("%Y-%m", Trip.created_at).label("month"),
+            func.count(Trip.trip_id).label("count")
         )
-        .group_by(
-            Trip.source_location,
-            Trip.destination_location
-        )
+        .group_by("month")
+        .order_by("month")
         .all()
     )
 
-    route_chart = {
-        "labels": [
-            f"{r.source_location} → {r.destination_location}"
-            for r in routes
-        ],
-        "values": [
-            r[2]
-            for r in routes
-        ]
-    }
+    monthly_revenue_rows = (
+        db.query(
+            func.strftime("%Y-%m", Trip.created_at).label("month"),
+            func.coalesce(func.sum(Trip.revenue), 0.0).label("revenue")
+        )
+        .group_by("month")
+        .order_by("month")
+        .all()
+    )
+
+    monthly_fuel_rows = (
+        db.query(
+            func.strftime("%Y-%m", FuelLog.fuel_date).label("month"),
+            func.coalesce(func.sum(FuelLog.liters), 0.0).label("liters")
+        )
+        .group_by("month")
+        .order_by("month")
+        .all()
+    )
+
+    expense_distribution_rows = (
+        db.query(
+            Expense.expense_type,
+            func.coalesce(func.sum(Expense.amount), 0.0).label("amount")
+        )
+        .group_by(Expense.expense_type)
+        .all()
+    )
 
     return templates.TemplateResponse(
+        request,
         "reports.html",
         {
-            "request": request,
-            "trip_chart": trip_chart,
-            "route_chart": route_chart
+            "total_trips": total_trips,
+            "total_revenue": total_revenue,
+            "total_fuel_cost": total_fuel_cost,
+            "maintenance_cost": maintenance_cost,
+            "fleet_utilization": fleet_utilization,
+            "monthly_trip_labels": [row.month for row in monthly_trip_rows],
+            "monthly_trip_values": [row.count for row in monthly_trip_rows],
+            "monthly_revenue_labels": [row.month for row in monthly_revenue_rows],
+            "monthly_revenue_values": [row.revenue for row in monthly_revenue_rows],
+            "monthly_fuel_labels": [row.month for row in monthly_fuel_rows],
+            "monthly_fuel_values": [row.liters for row in monthly_fuel_rows],
+            "expense_labels": [row.expense_type for row in expense_distribution_rows],
+            "expense_values": [row.amount for row in expense_distribution_rows]
         }
     )
 
