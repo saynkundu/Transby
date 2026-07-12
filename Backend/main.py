@@ -659,5 +659,159 @@ def reports_page(
             "route_chart": route_chart
         }
     )
+
+##maintenance.html 
+from modules.database import MaintenanceLog
+
+@app.get("/maintenance", response_class=HTMLResponse)
+def maintenance_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    maintenance_logs = (
+        db.query(MaintenanceLog)
+        .all()
+    )
+
+    return templates.TemplateResponse(
+        "maintenance.html",
+        {
+            "request": request,
+            "maintenance_logs": maintenance_logs
+        }
+    )
+
+from datetime import date
+from modules.database import MaintenanceLog
+
+@app.get("/maintenance", response_class=HTMLResponse)
+def maintenance_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    maintenance_logs = db.query(MaintenanceLog).all()
+
+    upcoming_maintenance = (
+        db.query(MaintenanceLog)
+        .filter(
+            MaintenanceLog.status == "Active"
+        )
+        .order_by(MaintenanceLog.start_date)
+        .all()
+    )
+
+    return templates.TemplateResponse(
+        "maintenance.html",
+        {
+            "request": request,
+            "maintenance_logs": maintenance_logs,
+            "upcoming_maintenance": upcoming_maintenance
+        }
+    )
+
+from datetime import date
+
+@app.get("/maintenance", response_class=HTMLResponse)
+def maintenance_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    maintenance_logs = db.query(MaintenanceLog).all()
+
+    upcoming_maintenance = (
+        db.query(MaintenanceLog)
+        .filter(MaintenanceLog.status == "Active")
+        .order_by(MaintenanceLog.start_date)
+        .all()
+    )
+
+    vehicles = db.query(Vehicle).all()
+
+    fleet_health = []
+
+    for vehicle in vehicles:
+
+        last_service = (
+            db.query(MaintenanceLog)
+            .filter(
+                MaintenanceLog.vehicle_id == vehicle.vehicle_id,
+                MaintenanceLog.status == "Completed"
+            )
+            .order_by(MaintenanceLog.end_date.desc())
+            .first()
+        )
+
+        next_service = (
+            db.query(MaintenanceLog)
+            .filter(
+                MaintenanceLog.vehicle_id == vehicle.vehicle_id,
+                MaintenanceLog.status == "Active"
+            )
+            .order_by(MaintenanceLog.start_date)
+            .first()
+        )
+
+        # Simple Health Score
+        health_score = 100
+
+        if vehicle.status == "In Shop":
+            health_score -= 40
+
+        if next_service:
+            health_score -= 20
+
+        if health_score < 0:
+            health_score = 0
+
+        fleet_health.append({
+            "vehicle": vehicle.registration_number,
+            "health_score": health_score,
+            "last_service": last_service.end_date if last_service else None,
+            "next_service": next_service.start_date if next_service else None
+        })
+
+    return templates.TemplateResponse(
+        "maintenance.html",
+        {
+            "request": request,
+            "maintenance_logs": maintenance_logs,
+            "upcoming_maintenance": upcoming_maintenance,
+            "fleet_health": fleet_health
+        }
+    )
+
+from sqlalchemy import func
+from modules.database import Mechanic, MaintenanceLog
+
+@app.get("/maintenance", response_class=HTMLResponse)
+def maintenance_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    mechanics = (
+        db.query(
+            Mechanic,
+            func.count(MaintenanceLog.maintenance_id).label("jobs")
+        )
+        .outerjoin(
+            MaintenanceLog,
+            Mechanic.mechanic_id == MaintenanceLog.mechanic_id
+        )
+        .group_by(Mechanic.mechanic_id)
+        .all()
+    )
+
+    return templates.TemplateResponse(
+        "maintenance.html",
+        {
+            "request": request,
+            "mechanics": mechanics
+        }
+    )
+
 # Makes the remaining frontend pages, such as dashboard.html, available after login.
 app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
