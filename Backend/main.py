@@ -11,7 +11,7 @@ app=FastAPI(
     description="vehicale management system"
 )
 
-templates=Jinja2Templates(directory="frontend")
+templates=Jinja2Templates(directory="../Frontend")
 
 @app.get("/",response_class=HTMLResponse)
 def home(request:Request):

@@ -7,3 +7,4 @@ bcrypt
 dotenv
 pydantic[email]
 jinja2
+sqlalchemy
