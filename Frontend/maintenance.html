@@ -142,200 +142,330 @@
 
         <section>
 
-            <h2>Maintenance Records</h2>
+    <h2>Maintenance Records</h2>
 
-            <table border="1">
+    <table border="1">
 
-                <tr>
+        <thead>
 
-                    <th>ID</th>
+            <tr>
 
-                    <th>Vehicle</th>
+                <th>ID</th>
+                <th>Vehicle</th>
+                <th>Issue</th>
+                <th>Priority</th>
+                <th>Garage</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
 
-                    <th>Issue</th>
+            </tr>
 
-                    <th>Priority</th>
+        </thead>
 
-                    <th>Garage</th>
+        <tbody>
 
-                    <th>Date</th>
+        {% for log in maintenance_logs %}
 
-                    <th>Status</th>
+        <tr>
 
-                    <th>Action</th>
+            <td>M{{ "%03d"|format(log.maintenance_id) }}</td>
 
-                </tr>
+            <td>
+                {% if log.vehicle %}
+                    {{ log.vehicle.registration_number }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
 
-                <tr>
+            <td>{{ log.maintenance_type }}</td>
 
-                    <td>M001</td>
+            <td>
 
-                    <td>TRK-102</td>
+                {% if log.maintenance_cost >= 50000 %}
 
-                    <td>Engine Service</td>
+                    <span style="color:red;">High</span>
 
-                    <td>High</td>
+                {% elif log.maintenance_cost >= 15000 %}
 
-                    <td>Metro Garage</td>
+                    <span style="color:orange;">Medium</span>
 
-                    <td>15 Jul</td>
+                {% else %}
 
-                    <td>In Progress</td>
+                    <span style="color:green;">Low</span>
 
-                    <td>
+                {% endif %}
 
-                        <button>View</button>
+            </td>
 
-                        <button>Edit</button>
+            <td>
 
-                    </td>
+                {{ log.description if log.description else "Not Assigned" }}
 
-                </tr>
+            </td>
 
-                <tr>
+            <td>
 
-                    <td>M002</td>
+                {% if log.start_date %}
+                    {{ log.start_date.strftime("%d %b %Y") }}
+                {% else %}
+                    N/A
+                {% endif %}
 
-                    <td>TRK-215</td>
+            </td>
 
-                    <td>Brake Replacement</td>
+            <td>
 
-                    <td>Medium</td>
+                {% if log.status == "Completed" %}
 
-                    <td>Speed Motors</td>
+                    <span style="color:green;">Completed</span>
 
-                    <td>18 Jul</td>
+                {% else %}
 
-                    <td>Pending</td>
+                    <span style="color:orange;">{{ log.status }}</span>
 
-                    <td>
+                {% endif %}
 
-                        <button>View</button>
+            </td>
 
-                        <button>Edit</button>
+            <td>
 
-                    </td>
+                <a href="/maintenance/{{ log.maintenance_id }}">
+                    <button>View</button>
+                </a>
 
-                </tr>
+                <a href="/maintenance/edit/{{ log.maintenance_id }}">
+                    <button>Edit</button>
+                </a>
 
-            </table>
+            </td>
 
-        </section>
+        </tr>
 
+        {% else %}
+
+        <tr>
+
+            <td colspan="8" style="text-align:center;">
+                No Maintenance Records Found
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</section>
         <!-- Upcoming Maintenance -->
 
         <section>
 
-            <h2>Upcoming Maintenance</h2>
+    <h2>Upcoming Maintenance</h2>
 
-            <ul>
+    <ul>
 
-                <li>TRK-120 - Oil Change - 20 July</li>
+    {% for maintenance in upcoming_maintenance %}
 
-                <li>TRK-089 - Wheel Alignment - 22 July</li>
+        <li>
 
-                <li>TRK-300 - Battery Inspection - 24 July</li>
+            <strong>
+                {% if maintenance.vehicle %}
+                    {{ maintenance.vehicle.registration_number }}
+                {% else %}
+                    Unknown Vehicle
+                {% endif %}
+            </strong>
 
-            </ul>
+            -
 
-        </section>
+            {{ maintenance.maintenance_type }}
+
+            -
+
+            {% if maintenance.start_date %}
+                {{ maintenance.start_date.strftime("%d %b %Y") }}
+            {% else %}
+                Date Not Scheduled
+            {% endif %}
+
+        </li>
+
+    {% else %}
+
+        <li>
+            ✅ No Upcoming Maintenance Scheduled
+        </li>
+
+    {% endfor %}
+
+    </ul>
+
+</section>
 
         <!-- Vehicle Health -->
 
         <section>
 
-            <h2>Fleet Health Overview</h2>
+    <h2>Fleet Health Overview</h2>
 
-            <table border="1">
+    <table border="1">
 
-                <tr>
+        <thead>
 
-                    <th>Vehicle</th>
+        <tr>
 
-                    <th>Health Score</th>
+            <th>Vehicle</th>
+            <th>Health Score</th>
+            <th>Last Service</th>
+            <th>Next Service</th>
 
-                    <th>Last Service</th>
+        </tr>
 
-                    <th>Next Service</th>
+        </thead>
 
-                </tr>
+        <tbody>
 
-                <tr>
+        {% for vehicle in fleet_health %}
 
-                    <td>TRK-102</td>
+        <tr>
 
-                    <td>92%</td>
+            <td>{{ vehicle.vehicle }}</td>
 
-                    <td>10 June</td>
+            <td>
 
-                    <td>10 August</td>
+                {% if vehicle.health_score >= 90 %}
+                    <span style="color:green;">{{ vehicle.health_score }}%</span>
 
-                </tr>
+                {% elif vehicle.health_score >= 70 %}
+                    <span style="color:orange;">{{ vehicle.health_score }}%</span>
 
-                <tr>
+                {% else %}
+                    <span style="color:red;">{{ vehicle.health_score }}%</span>
 
-                    <td>TRK-215</td>
+                {% endif %}
 
-                    <td>71%</td>
+            </td>
 
-                    <td>25 May</td>
+            <td>
 
-                    <td>25 July</td>
+                {% if vehicle.last_service %}
+                    {{ vehicle.last_service.strftime("%d %b %Y") }}
+                {% else %}
+                    Never
+                {% endif %}
 
-                </tr>
+            </td>
 
-            </table>
+            <td>
 
-        </section>
+                {% if vehicle.next_service %}
+                    {{ vehicle.next_service.strftime("%d %b %Y") }}
+                {% else %}
+                    Not Scheduled
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% else %}
+
+        <tr>
+
+            <td colspan="4" style="text-align:center;">
+                No Fleet Data Available
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</section>
 
         <!-- Mechanics -->
 
         <section>
 
-            <h2>Assigned Mechanics</h2>
+    <h2>Assigned Mechanics</h2>
 
-            <table border="1">
+    <table border="1">
 
-                <tr>
+        <thead>
 
-                    <th>Name</th>
+        <tr>
 
-                    <th>Specialization</th>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th>Assigned Jobs</th>
+            <th>Status</th>
 
-                    <th>Assigned Jobs</th>
+        </tr>
 
-                    <th>Status</th>
+        </thead>
 
-                </tr>
+        <tbody>
 
-                <tr>
+        {% for mechanic, jobs in mechanics %}
 
-                    <td>Arjun Das</td>
+        <tr>
 
-                    <td>Engine</td>
+            <td>{{ mechanic.full_name }}</td>
 
-                    <td>5</td>
+            <td>{{ mechanic.specialization }}</td>
 
-                    <td>Available</td>
+            <td>{{ jobs }}</td>
 
-                </tr>
+            <td>
 
-                <tr>
+                {% if mechanic.status == "Available" %}
 
-                    <td>Ravi Kumar</td>
+                    <span style="color:green;">
+                        Available
+                    </span>
 
-                    <td>Electrical</td>
+                {% elif mechanic.status == "Busy" %}
 
-                    <td>3</td>
+                    <span style="color:orange;">
+                        Busy
+                    </span>
 
-                    <td>Busy</td>
+                {% else %}
 
-                </tr>
+                    <span style="color:red;">
+                        On Leave
+                    </span>
 
-            </table>
+                {% endif %}
 
-        </section>
+            </td>
 
+        </tr>
+
+        {% else %}
+
+        <tr>
+
+            <td colspan="4" style="text-align:center;">
+                No Mechanics Available
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</section>
         <!-- Alerts -->
 
         <section>
