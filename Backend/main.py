@@ -437,5 +437,227 @@ def drivers_page(
             "performance": performance
         }
     )
+
+@app.get("/trips", response_class=HTMLResponse)
+def trips_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    trips = (
+        db.query(Trip)
+        .all()
+    )
+
+    return templates.TemplateResponse(
+        "trips.html",
+        {
+            "request": request,
+            "trips": trips
+        }
+    )
+
+@app.get("/trip/{trip_id}", response_class=HTMLResponse)
+def trip_details(
+    trip_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    trip = db.query(Trip).filter(
+        Trip.trip_id == trip_id
+    ).first()
+
+    if not trip:
+        raise HTTPException(
+            status_code=404,
+            detail="Trip not found."
+        )
+
+    return templates.TemplateResponse(
+        "trip_details.html",
+        {
+            "request": request,
+            "trip": trip
+        }
+    )
+
+
+@app.get("/trips", response_class=HTMLResponse)
+def trips_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    trips = db.query(Trip).all()
+
+    return templates.TemplateResponse(
+        "trips.html",
+        {
+            "request": request,
+            "trips": trips
+        }
+    )
+
+from sqlalchemy import func, case
+from modules.database import Trip
+
+@app.get("/reports", response_class=HTMLResponse)
+def reports_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    delivery_performance = (
+        db.query(
+            Trip.source_location,
+            Trip.destination_location,
+            func.count(Trip.trip_id).label("total_trips"),
+            func.sum(
+                case(
+                    (Trip.status == "Completed", 1),
+                    else_=0
+                )
+            ).label("on_time"),
+            func.sum(
+                case(
+                    (Trip.status == "Cancelled", 1),
+                    else_=0
+                )
+            ).label("delayed")
+        )
+        .group_by(
+            Trip.source_location,
+            Trip.destination_location
+        )
+        .all()
+    )
+
+    return templates.TemplateResponse(
+        "reports.html",
+        {
+            "request": request,
+            "delivery_performance": delivery_performance
+        }
+    )
+
+from datetime import datetime
+
+@app.get("/trips", response_class=HTMLResponse)
+def trips_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    trips = db.query(Trip).all()
+
+    alerts = []
+
+    for trip in trips:
+
+        # Cancelled Trip
+        if trip.status == "Cancelled":
+            alerts.append({
+                "type": "danger",
+                "message": f"Trip {trip.trip_code} has been cancelled."
+            })
+
+        # Vehicle in Maintenance
+        if trip.vehicle and trip.vehicle.status == "In Shop":
+            alerts.append({
+                "type": "warning",
+                "message": f"Vehicle {trip.vehicle.registration_number} is under maintenance."
+            })
+
+        # Driver Suspended
+        if trip.driver and trip.driver.status == "Suspended":
+            alerts.append({
+                "type": "danger",
+                "message": f"Driver {trip.driver.full_name} is suspended."
+            })
+
+        # Low Safety Score
+        if trip.driver and trip.driver.safety_score < 70:
+            alerts.append({
+                "type": "warning",
+                "message": f"{trip.driver.full_name}'s safety score is below 70."
+            })
+
+    return templates.TemplateResponse(
+        "trips.html",
+        {
+            "request": request,
+            "trips": trips,
+            "alerts": alerts
+        }
+    )
+
+from sqlalchemy import func
+from modules.database import Trip
+
+@app.get("/reports", response_class=HTMLResponse)
+def reports_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    trips = db.query(Trip).all()
+
+    # -------- Trip Completion --------
+    completed = db.query(Trip).filter(
+        Trip.status == "Completed"
+    ).count()
+
+    dispatched = db.query(Trip).filter(
+        Trip.status == "Dispatched"
+    ).count()
+
+    cancelled = db.query(Trip).filter(
+        Trip.status == "Cancelled"
+    ).count()
+
+    draft = db.query(Trip).filter(
+        Trip.status == "Draft"
+    ).count()
+
+    trip_chart = {
+        "labels": ["Completed", "Dispatched", "Draft", "Cancelled"],
+        "values": [completed, dispatched, draft, cancelled]
+    }
+
+    # -------- Route Performance --------
+
+    routes = (
+        db.query(
+            Trip.source_location,
+            Trip.destination_location,
+            func.count(Trip.trip_id)
+        )
+        .group_by(
+            Trip.source_location,
+            Trip.destination_location
+        )
+        .all()
+    )
+
+    route_chart = {
+        "labels": [
+            f"{r.source_location} → {r.destination_location}"
+            for r in routes
+        ],
+        "values": [
+            r[2]
+            for r in routes
+        ]
+    }
+
+    return templates.TemplateResponse(
+        "reports.html",
+        {
+            "request": request,
+            "trip_chart": trip_chart,
+            "route_chart": route_chart
+        }
+    )
 # Makes the remaining frontend pages, such as dashboard.html, available after login.
 app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
