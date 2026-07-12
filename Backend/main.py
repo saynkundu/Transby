@@ -50,6 +50,41 @@ def home(request: Request):
     return templates.TemplateResponse(request, "index.html")
 
 
+@app.get("/dashboard", response_class=HTMLResponse)
+def dashboard_page(request: Request):
+    return templates.TemplateResponse(request, "dashboard.html")
+
+
+@app.get("/drivers", response_class=HTMLResponse)
+def drivers_page(request: Request):
+    return templates.TemplateResponse(request, "drivers.html")
+
+
+@app.get("/trips", response_class=HTMLResponse)
+def trips_page(request: Request):
+    return templates.TemplateResponse(request, "trips.html")
+
+
+@app.get("/maintenance", response_class=HTMLResponse)
+def maintenance_page(request: Request):
+    return templates.TemplateResponse(request, "maintenance.html")
+
+
+@app.get("/fuel-expenses", response_class=HTMLResponse)
+def fuel_expenses_page(request: Request):
+    return templates.TemplateResponse(request, "fuel-expenses.html")
+
+
+@app.get("/reports", response_class=HTMLResponse)
+def reports_page(request: Request):
+    return templates.TemplateResponse(request, "reports.html")
+
+
+@app.get("/settings", response_class=HTMLResponse)
+def settings_page(request: Request):
+    return templates.TemplateResponse(request, "settings.html")
+
+
 @app.get("/register", response_class=HTMLResponse)
 def register_page(request: Request):
   return templates.TemplateResponse(request, "register.html")
@@ -309,9 +344,9 @@ def vehicles_page(
     vehicles = db.query(Vehicle).all()
 
     return templates.TemplateResponse(
+        request,
         "vehicles.html",
         {
-            "request": request,
             "vehicles": vehicles
         }
     )
