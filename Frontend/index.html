@@ -204,22 +204,10 @@
                 });
 
                 const result = await response.json();
-
-                if (!response.ok) {
-                    const message = Array.isArray(result.detail)
-                        ? result.detail.map(item => item.msg).join(', ')
-                        : result.detail;
-                    throw new Error(message || 'Unable to sign in.');
-                }
-
+                if (!response.ok) throw new Error(result.detail || 'Unable to sign in.');
                 alert(result.message);
-
                 window.location.href = '/dashboard.html';
-
-            }
-
-            catch (error) {
-
+            } catch (error) {
                 alert(error.message);
 
             }

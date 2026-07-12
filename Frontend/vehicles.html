@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    ...
+</head>
+
+<body>
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -188,10 +197,9 @@ Add Vehicle
             <th>Vehicle</th>
             <th>Type</th>
             <th>Capacity</th>
+            <th>Odometer</th>
             <th>Status</th>
-            <th>Health</th>
-            <th>Documents</th>
-            <th>Actions</th>
+           
 
         </tr>
 
@@ -199,43 +207,69 @@ Add Vehicle
 
     <tbody>
 
-        <tr>
+{% for vehicle in vehicles %}
 
-            <td>WB20AB1234</td>
-            <td>Tata Ace</td>
-            <td>Mini Truck</td>
-            <td>750 Kg</td>
-            <td>Available</td>
-            <td>Excellent</td>
-            <td>
-                <button>View</button>
-            </td>
-            <td>
-                <button>Edit</button>
-                <button>Delete</button>
-            </td>
+<tr>
 
-        </tr>
+    <td>{{ vehicle.registration_number }}</td>
 
-        <tr>
+    <td>{{ vehicle.vehicle_name }}</td>
 
-            <td>WB10XY5678</td>
-            <td>Ashok Leyland</td>
-            <td>Truck</td>
-            <td>5000 Kg</td>
-            <td>On Trip</td>
-            <td>Good</td>
-            <td>
-                <button>View</button>
-            </td>
-            <td>
-                <button>Edit</button>
-                <button>Delete</button>
-            </td>
+    <td>{{ vehicle.vehicle_type }}</td>
 
-        </tr>
+    <td>{{ vehicle.max_load_capacity }} Kg</td>
 
-    </tbody>
+    <td>{{ vehicle.status }}</td>
+
+    <td>
+
+        {% if vehicle.status == "Available" %}
+
+            <span style="color:green;">Excellent</span>
+
+        {% elif vehicle.status == "On Trip" %}
+
+            <span style="color:orange;">Busy</span>
+
+        {% elif vehicle.status == "In Shop" %}
+
+            <span style="color:red;">Maintenance</span>
+
+        {% else %}
+
+            <span style="color:gray;">Retired</span>
+
+        {% endif %}
+
+    </td>
+
+    <td>
+
+        <a href="/vehicle/{{ vehicle.vehicle_id }}">
+            <button>View</button>
+        </a>
+
+    </td>
+
+    <td>
+
+        <a href="/vehicle/edit/{{ vehicle.vehicle_id }}">
+            <button>Edit</button>
+        </a>
+
+        <button
+            onclick="deleteVehicle({{ vehicle.vehicle_id }})"
+        >
+            Delete
+        </button>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
 
 </table>
 </section>

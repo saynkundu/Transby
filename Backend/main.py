@@ -123,5 +123,64 @@ def add_vehicle(
         }
     }
 
+from modules.database import Vehicle
+
+@app.get("/api/vehicles")
+def get_all_vehicles(db: Session = Depends(get_db)):
+    vehicles = db.query(Vehicle).all()
+
+    return [
+        {
+            "vehicle_id": vehicle.vehicle_id,
+            "registration_number": vehicle.registration_number,
+            "vehicle_name": vehicle.vehicle_name,
+            "vehicle_type": vehicle.vehicle_type,
+            "max_load_capacity": vehicle.max_load_capacity,
+            "odometer": vehicle.odometer,
+            "acquisition_cost": vehicle.acquisition_cost,
+            "region": vehicle.region,
+            "status": vehicle.status,
+        }
+        for vehicle in vehicles
+    ]
+
+@app.get("/vehicles", response_class=HTMLResponse)
+def vehicles_page(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+
+    vehicles = db.query(Vehicle).all()
+
+    return templates.TemplateResponse(
+        "vehicles.html",
+        {
+            "request": request,
+            "vehicles": vehicles
+        }
+    )
+
+@app.delete("/api/vehicle/{vehicle_id}")
+def delete_vehicle(
+    vehicle_id: int,
+    db: Session = Depends(get_db)
+):
+
+    vehicle = db.query(Vehicle).filter(
+        Vehicle.vehicle_id == vehicle_id
+    ).first()
+
+    if not vehicle:
+        raise HTTPException(
+            status_code=404,
+            detail="Vehicle not found."
+        )
+
+    db.delete(vehicle)
+    db.commit()
+
+    return {
+        "message": "Vehicle deleted successfully."
+    }
 # Makes the remaining frontend pages, such as dashboard.html, available after login.
 app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
