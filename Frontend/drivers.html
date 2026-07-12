@@ -111,128 +111,193 @@
             </section>
 
             <!-- Driver Table -->
+<section>
 
-            <section>
+<h2>Driver Directory</h2>
 
-                <h2>Driver Directory</h2>
+<table border="1">
 
-                <table border="1">
+<thead>
 
-                    <tr>
+<tr>
 
-                        <th>Photo</th>
-                        <th>Driver ID</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Vehicle</th>
-                        <th>Status</th>
-                        <th>License</th>
-                        <th>Rating</th>
-                        <th>Action</th>
+<th>Photo</th>
+<th>ID</th>
+<th>Name</th>
+<th>Phone</th>
+<th>License No.</th>
+<th>Status</th>
+<th>License Expiry</th>
+<th>Safety Score</th>
+<th>Action</th>
 
-                    </tr>
+</tr>
 
-                    <tr>
+</thead>
 
-                        <td>👨</td>
-                        <td>D001</td>
-                        <td>Rahul Sharma</td>
-                        <td>9876543210</td>
-                        <td>TRK-101</td>
-                        <td>On Trip</td>
-                        <td>Valid</td>
-                        <td>⭐ 4.9</td>
-                        <td>
+<tbody>
 
-                            <button>View</button>
+{% for driver in drivers %}
 
-                            <button>Edit</button>
+<tr>
 
-                            <button>Delete</button>
+<td>👨</td>
 
-                        </td>
+<td>D{{ "%03d"|format(driver.driver_id) }}</td>
 
-                    </tr>
+<td>{{ driver.full_name }}</td>
 
-                    <tr>
+<td>{{ driver.contact_number }}</td>
 
-                        <td>👨</td>
-                        <td>D002</td>
-                        <td>Amit Roy</td>
-                        <td>9831122334</td>
-                        <td>TRK-205</td>
-                        <td>Available</td>
-                        <td>Expiring Soon</td>
-                        <td>⭐ 4.8</td>
-                        <td>
+<td>{{ driver.license_number }}</td>
 
-                            <button>View</button>
+<td>
 
-                            <button>Edit</button>
+{% if driver.status == "Available" %}
 
-                            <button>Delete</button>
+<span style="color:green;">Available</span>
 
-                        </td>
+{% elif driver.status == "On Trip" %}
 
-                    </tr>
+<span style="color:orange;">On Trip</span>
 
-                </table>
+{% elif driver.status == "Off Duty" %}
 
-            </section>
+<span style="color:gray;">Off Duty</span>
 
-            <!-- License Alerts -->
+{% else %}
 
-            <section>
+<span style="color:red;">Suspended</span>
 
-                <h2>License Expiry Alerts</h2>
+{% endif %}
 
-                <ul>
+</td>
 
-                    <li>⚠ Rahul Sharma - Expires in 15 Days</li>
+<td>{{ driver.license_expiry }}</td>
 
-                    <li>⚠ Amit Roy - Expires in 7 Days</li>
+<td>{{ driver.safety_score }}</td>
 
-                    <li>⚠ Vikash Singh - Expired Yesterday</li>
+<td>
 
-                </ul>
+<a href="/driver/{{ driver.driver_id }}">
+<button>View</button>
+</a>
 
-            </section>
+<a href="/driver/edit/{{ driver.driver_id }}">
+<button>Edit</button>
+</a>
+
+<button
+type="button"
+onclick="deleteDriver('{{ driver.driver_id }}')">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="9" style="text-align:center">
+
+No Drivers Found
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</section>
 
             <!-- Driver Performance -->
 
             <section>
 
-                <h2>Driver Performance</h2>
+<h2>Driver Performance</h2>
 
-                <table border="1">
+<table border="1">
 
-                    <tr>
+<thead>
 
-                        <th>Name</th>
-                        <th>Total Trips</th>
-                        <th>Completed</th>
-                        <th>Cancelled</th>
-                        <th>Average Rating</th>
+<tr>
 
-                    </tr>
+<th>Name</th>
+<th>Total Trips</th>
+<th>Completed</th>
+<th>Cancelled</th>
+<th>Safety Score</th>
 
-                    <tr>
+</tr>
 
-                        <td>Rahul Sharma</td>
+</thead>
 
-                        <td>160</td>
+<tbody>
 
-                        <td>156</td>
+{% for driver in performance %}
 
-                        <td>4</td>
+<tr>
 
-                        <td>4.9</td>
+<td>{{ driver.name }}</td>
 
-                    </tr>
+<td>{{ driver.total }}</td>
 
-                </table>
+<td>{{ driver.completed }}</td>
 
-            </section>
+<td>{{ driver.cancelled }}</td>
+
+<td>
+
+{% if driver.rating >= 90 %}
+
+<span style="color:green;">
+⭐ {{ driver.rating }}
+</span>
+
+{% elif driver.rating >= 70 %}
+
+<span style="color:orange;">
+⭐ {{ driver.rating }}
+</span>
+
+{% else %}
+
+<span style="color:red;">
+⭐ {{ driver.rating }}
+</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="5" style="text-align:center;">
+No Driver Performance Available
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</section>
 
             <!-- Quick Actions -->
 
