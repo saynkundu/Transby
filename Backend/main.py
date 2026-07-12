@@ -7,9 +7,10 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from modules.db import Base, engine, get_db
-from modules.database import Role, User
+from modules.database import Role, User,Vehicle
 from modules.hashed_password import check_password, hashed_password
-from modules.schemas import Login, Register
+from modules.schemas import Login, Register,VehicleCreate
+
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -69,10 +70,58 @@ def login(payload: Login, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid email or password.")
     if not user.is_active:
         raise HTTPException(status_code=403, detail="This account is inactive.")
-    if not user.role or user.role.role_name != payload.role:
+    if payload.role and (not user.role or user.role.role_name != payload.role):
         raise HTTPException(status_code=403, detail="The selected role does not match this account.")
     return {"message": "Login successful.", "user": {"id": user.user_id, "name": user.full_name, "role": user.role.role_name}}
 
+
+
+@app.post("/api/add_vehicle", status_code=status.HTTP_201_CREATED)
+def add_vehicle(
+    payload: VehicleCreate,
+    db: Session = Depends(get_db)
+):
+    # Check if registration number already exists
+    existing_vehicle = (
+        db.query(Vehicle)
+        .filter(
+            Vehicle.registration_number == payload.registration_number
+        )
+        .first()
+    )
+
+    if existing_vehicle:
+        raise HTTPException(
+            status_code=409,
+            detail="Vehicle with this registration number already exists."
+        )
+
+    # Create Vehicle Object
+    vehicle = Vehicle(
+        registration_number=payload.registration_number.strip().upper(),
+        vehicle_name=payload.vehicle_name.strip(),
+        vehicle_type=payload.vehicle_type.strip(),
+        max_load_capacity=payload.max_load_capacity,
+        odometer=payload.odometer,
+        acquisition_cost=payload.acquisition_cost,
+        region=payload.region,
+        status="Available"
+    )
+
+    db.add(vehicle)
+    db.commit()
+    db.refresh(vehicle)
+
+    return {
+        "message": "Vehicle added successfully.",
+        "vehicle": {
+            "vehicle_id": vehicle.vehicle_id,
+            "registration_number": vehicle.registration_number,
+            "vehicle_name": vehicle.vehicle_name,
+            "vehicle_type": vehicle.vehicle_type,
+            "status": vehicle.status
+        }
+    }
 
 # Makes the remaining frontend pages, such as dashboard.html, available after login.
 app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
