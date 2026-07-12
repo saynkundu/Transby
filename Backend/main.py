@@ -696,5 +696,6 @@ def reports_page(
             "route_chart": route_chart
         }
     )
+
 # Makes the remaining frontend pages, such as dashboard.html, available after login.
 app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
