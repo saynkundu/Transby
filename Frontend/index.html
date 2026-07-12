@@ -97,51 +97,15 @@
 
                 </div>
 
-                <!-- Role -->
-
-                <div class="input-group">
-
-                    <label for="role">
-
-                        Role (RBAC)
-
-                    </label>
-
-                    <div class="input-box">
-
-                        <i class="fa-solid fa-user-shield"></i>
-
-                        <select id="role" required>
-
-                            <option value="" selected disabled>Select Role</option>
-
-                            <option>Fleet Manager</option>
-
-                            <option>Dispatcher</option>
-
-                            <option>Safety Officer</option>
-
-                            <option>Financial Analyst</option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <!-- Options -->
+                <!-- Forgot Password -->
 
                 <div id="login-options">
 
-                    <label>
+                    <a href="forgot-password.html">
 
-                        <input type="checkbox">
+                        Forgot Password?
 
-                        Remember Me
-
-                    </label>
-
-                    <a href="#">Forgot Password?</a>
+                    </a>
 
                 </div>
 
@@ -175,7 +139,7 @@
 
                     Don't have an account?
 
-                    <a href="/register">
+                    <a href="register.html">
 
                         Register Here
 
@@ -192,8 +156,6 @@
         <aside id="right-section">
 
             <div id="illustration-container">
-
-                <!-- Replace this image with your own illustration -->
 
                 <img
                     src="assets/login-illustration.png"
@@ -217,29 +179,60 @@
     <script>
         document.getElementById('login-form').addEventListener('submit', async (event) => {
             event.preventDefault();
+
             const button = document.getElementById('login-btn');
             button.disabled = true;
+
             try {
+
                 const response = await fetch('/api/login', {
+
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+
                     body: JSON.stringify({
+
                         email: document.getElementById('email').value,
-                        password: document.getElementById('password').value,
-                        role: document.getElementById('role').value
+
+                        password: document.getElementById('password').value
+
                     })
+
                 });
+
                 const result = await response.json();
-                if (!response.ok) throw new Error(result.detail || 'Unable to sign in.');
+
+                if (!response.ok) {
+                    const message = Array.isArray(result.detail)
+                        ? result.detail.map(item => item.msg).join(', ')
+                        : result.detail;
+                    throw new Error(message || 'Unable to sign in.');
+                }
+
                 alert(result.message);
+
                 window.location.href = '/dashboard.html';
-            } catch (error) {
-                alert(error.message);
-            } finally {
-                button.disabled = false;
+
             }
+
+            catch (error) {
+
+                alert(error.message);
+
+            }
+
+            finally {
+
+                button.disabled = false;
+
+            }
+
         });
     </script>
+
 </body>
 
 </html>
