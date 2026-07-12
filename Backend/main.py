@@ -5,6 +5,7 @@ import secrets
 import smtplib
 from datetime import datetime, timedelta
 from email.utils import parseaddr
+from email.mime.text import MIMEText
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Request, status
@@ -212,7 +213,7 @@ def register(payload: Register, db: Session = Depends(get_db)):
         role_id=role.role_id,
     )
     db.add(user)
-    from sqlalchemy import case
+    db.commit()
     db.refresh(user)
     return {"message": "Account created successfully.", "user_id": user.user_id}
 
